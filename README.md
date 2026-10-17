@@ -16,7 +16,7 @@
 
 1. **流程说明**：`SKILL.md` 和 `references/`，告诉 AI 和人每一步做什么。
 2. **空模板**：`templates/`，AI 生成 `ramp/` 工作区时自动复制，内容要 AI 去填。
-3. **填好的示例**：`industries/coalbed-methane/`，AI 用公开资料填出来的煤层气案例，用来看「填完长什么样」，不是答案。
+3. **填好的示例**：`industries/coalbed-methane/`（煤层气）和 `industries/web-novel/`（网络文学），AI 用公开资料填出来的行业案例，用来看「填完长什么样」，不是答案。
 
 ## 怎么用（四步）
 
@@ -88,7 +88,8 @@ fde-ramp/
     selftest.py                # 17 项自测，CI 入口
   industries/
     coalbed-methane/           # 煤层气：AI 填好的公开源示例（不是模板）
-  examples/                    # 示例索引 + 完整跑通的一次运行（coalbed-methane-run/）
+    web-novel/                 # 网络文学：第二个行业包（验证通用性）
+  examples/                    # 示例索引 + 两个完整跑通的运行（coalbed-methane-run/、web-novel-run/）
   plugin/
     roadmap.md                 # 以后做成插件时的工具/界面/发布计划
   REVIEW.md / REVIEW2.md / REVIEW3.md  # 三轮独立验收报告
@@ -121,14 +122,23 @@ fde-ramp/
 
 它没有客户文档、没有券商研报全文，**所有术语最高只到「公开说法」**；所有规划都标了「公司自述/媒体转述/推断」。不要把它当权威报告或照抄。
 
-## 完整跑通的一次运行
+## 第二个行业：网络文学（网文写作）
 
-[`examples/coalbed-methane-run/`](examples/coalbed-methane-run/README.md) 是从空模板开始、走完四步、通过 strict validator 和自检的完整 `ramp/` 示例。它包含 5 处**模拟访谈**修正（已明确标注是虚构示例，只演示记录格式），适合你对照着看「每一步填完应该长什么样」。
+[`industries/web-novel/`](industries/web-novel/README.md) 是第二个行业包，用来验证 skill 不是只对煤层气有效。假设客户是「某中型网络文学平台（付费 + 免费混合）」；同样没有客户文档，**0 个已校准术语**，所有规划标了 自述/转述/推断。
+
+包含：27 条来源、77 个候选术语（39 public / 36 needs-customer / 2 unsure）、14 家玩家、10 条关系、8 个业务域、25 行活动表（16 列）、15 条待验证、12 张 mermaid 图。
+
+## 完整跑通的运行（两个行业）
+
+- [`examples/coalbed-methane-run/`](examples/coalbed-methane-run/README.md)：煤层气，31 条来源、78 个术语、36 行活动表；
+- [`examples/web-novel-run/`](examples/web-novel-run/README.md)：网络文学，27 条来源、77 个术语、25 行活动表。
+
+两个都是从 `init_ramp.py` 生成、走完四步、通过 `validate_artifacts.py --strict` 和 `readiness.py --check` 的完整 `ramp/` 示例。都含 5 处**模拟访谈**修正（已标注是虚构示例，只演示记录格式）。
 
 ## 当前状态
 
-- ✅ **v0.3.3（当前）**：活动表再加「谁验收/签字」「是否外包/自营」两列（共 16 列）；前面已做产业链总览/玩家关系 mermaid 图、来源补充到 31 条、自学模式、`sources.md`、完整跑通的煤层气示例。
-- ⏭ **下一步**：补一个完整跑通的 `ramp/` 示例；然后把 `dsh-industry-research` / `dsh-scout` / `dsh-kb` 接进来；最后做成 DSH 插件（`ramp_*` 工具 + 面板 + npm），见 `plugin/roadmap.md`。
+- ✅ **v0.4.0（当前）**：第二个行业包（网络文学）+ 第二个完整 `ramp/` 示例完成；skill 已用两个行业验证过。
+- ⏭ **下一步**：组合 `dsh-industry-research` / `dsh-scout` / `dsh-kb` 做适配层（M1.5），然后插件化（`ramp_*` 工具 + 面板 + npm），见 `plugin/roadmap.md`。
 
 ## 已知限制
 

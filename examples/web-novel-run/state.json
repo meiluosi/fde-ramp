@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "industry": "网络文学",
+  "customer": "某中型网文平台（示例）",
+  "persona": "内容/运营负责人（示例）",
+  "deadline": "见客户前",
+  "started": "2026-10-18",
+  "blocks": {
+    "map": "done",
+    "glossary": "done",
+    "flow": "done",
+    "negate": "done",
+    "brief": "done"
+  },
+  "dimensions": {
+    "structure": 3,
+    "language": 3,
+    "players": 3,
+    "decision": 3,
+    "dialogue": 3
+  },
+  "counts": {
+    "terms": 77,
+    "sources": 27,
+    "verification_items": 15,
+    "corrections": 5,
+    "drills": 0,
+    "players": 14,
+    "relations": 10,
+    "domains": 8,
+    "activities": 25
+  },
+  "artifacts": {
+    "plan": "plan.md",
+    "sources": "sources.jsonl",
+    "sources_md": "sources.md",
+    "value_chain": "value-chain.md",
+    "value_chain_mmd": "value-chain.mmd",
+    "chain": "chain.md",
+    "chain_mmd": "chain.mmd",
+    "domains": "domains.md",
+    "activities": "activities.md",
+    "glossary": "glossary.md",
+    "flow": "flow.md",
+    "flow_mmd": "flow.mmd",
+    "verification_list": "verification-list.md",
+    "corrections": "corrections.md",
+    "open_questions": "open-questions.md",
+    "brief": "brief.md",
+    "readiness": "readiness.md",
+    "drill_scorecard": "drill-scorecard.md",
+    "calibration_log": "calibration-log.md"
+  },
+  "gaps": []
+}

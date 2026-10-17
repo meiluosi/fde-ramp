@@ -2,9 +2,12 @@
 
 这里放**跑出来的示例**，不是模板。模板在 [`../templates/`](../templates/)。
 
-## 1. 完整跑通的一次运行（推荐先看这个）
+## 1. 完整跑通的运行（两个行业，推荐先看）
 
-[`coalbed-methane-run/`](coalbed-methane-run/README.md)：用 `init_ramp.py` 生成、走完四步、通过 `validate_artifacts.py --strict` 和 `readiness.py --check` 的完整 `ramp/` 工作区。包含 31 条来源、78 个候选术语、36 行活动表（14 列）、5 处模拟访谈修正（已标明是虚构示例）。**先看它的 `README.md`，再按文件清单挑着看。**
+[`coalbed-methane-run/`](coalbed-methane-run/README.md)：煤层气，31 条来源、78 个候选术语、36 行活动表、5 处模拟访谈修正。
+[`web-novel-run/`](web-novel-run/README.md)：网络文学，27 条来源、77 个候选术语、25 行活动表、5 处模拟访谈修正。
+
+两个都是用 `init_ramp.py` 生成、走完四步、通过 `validate_artifacts.py --strict` 和 `readiness.py --check` 的完整 `ramp/` 工作区。**先看各自的 `README.md`，再按文件清单挑着看。**
 
 ## 2. 单步抽样子集
 

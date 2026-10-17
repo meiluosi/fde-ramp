@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.0 · 2026-10-18
+
+- 第二个行业包：`industries/web-novel/`（网络文学 / 网文写作），27 条来源、77 个候选术语（0 verified）、14 家玩家、10 条关系、8 个业务域、25 行活动表（16 列）、15 条待验证、12 张 mermaid。
+- 第二个完整 ramp 示例：`examples/web-novel-run/`，通过 `validate_artifacts.py --strict` 与 `readiness.py --check`；含 5 处明确标注的模拟访谈修正。
+- README / examples / plugin roadmap 更新：M1 完成，下一步 M1.5（组合 `dsh-industry-research` / `dsh-scout` / `dsh-kb`）与 M2 插件化。
+- 仓库已 `git init`、首次提交并打 tag `v0.3.3`；本次提交将打 `v0.4.0`。
+
 ## v0.3.3 · 2026-10-18
 
 - 活动表再加两列：「谁验收/签字」「是否外包/自营」，共 16 列；模板、案例 36 行、示例 ramp、SKILL/README/QUICKSTART/method 同步。
