@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.7.0 · 2026-10-18
+
+- 网文包补充：
+  - `players.md` 新增「玩家赛道与收入结构总览」14 家/类 × 6 列（主要赛道 / 最近公开期收入结构 / 用户画像 / 来源 / 信度）；非上市平台写「未公开披露」，第三方画像标 ⚠️/❓；新增 2026 中报/季报数据与 4 条来源（S28–S34，来源 27→34）。
+  - `activities.md` 25 行重写「做什么/业务背景」，新增「关键环节展开（带真实例子）」10 个环节：签约买断/保底/分成、审核敏感词、上架推荐、付费 vs 免费、广告分成、打赏月票、有声/短剧/影视授权、出海翻译、稿酬结算/税务、作者运营/断更。
+- skill 同步：`templates/chain.md` 增加「玩家画像补充：赛道/收入结构/用户画像」；`templates/activities.md`、SKILL、method 增加「关键环节写具体场景 + 公开例子」。
+- `examples/web-novel-run/` 同步 activities/sources，重跑 strict validator 与 readiness，仍通过。
+- 术语仍 0 个 verified；非上市平台收入与用户画像明确标为空白/第三方。
+
 ## v0.6.0 · 2026-10-18
 
 - M1.5 适配层：新增 `references/adapters.md`，写清 `dsh-industry-research`（`industry_map`/`industry_track`/`company_scan`）、`dsh-scout`（12 个 `scout_*`、E0–E3）、`dsh-kb` 的具体接法、导出路径、证据等级映射与兼容风险。

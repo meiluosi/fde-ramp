@@ -6,18 +6,18 @@
 
 - **不是真实客户项目**：客户名、访谈对象、修正内容都是虚构示例，只用于演示格式；`corrections.md` 的 5 处修正已逐条标「虚构示例，只演示记录格式」。
 - **不是模板**：模板在 [`../../templates/`](../../templates/)；这里是填好的结果。
-- **不是权威行业报告**：所有数据来自公开源（27 条，见 `sources.md`），术语没有客户校准（**0 个已验证**），规划都标了 自述/转述/推断。
+- **不是权威行业报告**：所有数据来自公开源（34 条，见 `sources.md`），术语没有客户校准（**0 个已验证**），规划都标了 自述/转述/推断。
 - **内容来源**：价值链/链路/业务域/活动表/术语/流程/待验证/20 问均从行业包 [`../../industries/web-novel/`](../../industries/web-novel/) 复制，仅做**轻量适配**（标题加「示例运行」、去掉指向行业包内 `players.md` 的悬空引用）；`.mmd` 由各文件第一个 mermaid block 提取。
 
 ## 怎么看（建议顺序）
 
 1. `plan.md`：四步清单和完成情况（第 4 步标了"模拟访谈"）。
 2. `value-chain.md` + `chain.md`：行业怎么赚钱、链上有谁、什么关系。
-3. `domains.md` → `flow.md` → `activities.md`：业务域 → 流程 → 16 列活动表（25 行）。
+3. `domains.md` → `flow.md` → `activities.md`：业务域 → 流程 → 16 列活动表（25 行）+ 关键环节展开 10 个（含 2026 中报/季报的真实例子）。
 4. `glossary.md` + `verification-list.md`：77 个候选术语 + Top 15 待验证。
 5. `corrections.md`：第 4 步怎么记（注意：全部是虚构示例）。
 6. `brief.md` + `readiness.md` + `drill-scorecard.md`：见客户前的一页纸、自检、对话演练。
-7. `sources.md`：27 条来源（编号、标题、发布方、日期、等级、链接）。
+7. `sources.md`：34 条来源（编号、标题、发布方、日期、等级、链接）。
 
 ## 怎么复现
 
@@ -53,7 +53,7 @@ python3 scripts/readiness.py --root /tmp/web-novel-demo --check
 | `chain.md` / `chain.mmd` | 每段有谁、什么关系、下一步想干什么 |
 | `domains.md` | 平台分几块业务（8 个域） |
 | `flow.md` / `flow.mmd` | 每块业务怎么走、哪里不确定（12 个 ❓ 节点） |
-| `activities.md` | 一行一个环节：做什么/谁做/影响谁/什么工具/为什么（16 列 × 25 行） |
+| `activities.md` | 一行一个环节（16 列 × 25 行）+ 关键环节展开 10 个（签约/审核/推荐/付费免费/广告/打赏/版权/出海/结算/作者运营，带真实例子与 [Sxx]） |
 | `glossary.md` | 77 个候选术语 + 12 组易混对（0 个已验证） |
 | `verification-list.md` | Top 15 待验证项 + 「我画了…您帮我改」问法 |
 | `corrections.md` | 被一线改了什么（**模拟访谈，5 处**） |
@@ -62,7 +62,7 @@ python3 scripts/readiness.py --root /tmp/web-novel-demo --check
 | `readiness.md` | 五个维度还差什么 |
 | `drill-scorecard.md` | 一次模拟对话演练的评分 |
 | `calibration-log.md` | 术语校准日志（本示例无客户文档，0 条） |
-| `sources.jsonl` / `sources.md` | 27 条来源与人类可读清单 |
+| `sources.jsonl` / `sources.md` | 34 条来源与人类可读清单 |
 | `state.json` | 自检脚本用的状态（blocks 全 done、五维 3 分、计数） |
 
 ## 验证结果（生成时实测）
@@ -70,7 +70,7 @@ python3 scripts/readiness.py --root /tmp/web-novel-demo --check
 ```
 validate_artifacts.py --strict   → OK（exit 0）
 readiness.py --check             → gate: PASS（exit 0）
-sources: 27  terms: 77  verification: 15  corrections: 5  guessed nodes: 12
+sources: 34  terms: 77  verification: 15  corrections: 5  guessed nodes: 12
 chain players: 14  relations: 10  domains: 8  activities: 25
 glossary statuses: public 39 / needs-customer 36 / unsure 2 / 已验证 0
 ```

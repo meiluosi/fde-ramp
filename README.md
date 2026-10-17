@@ -146,18 +146,18 @@ fde-ramp/
 
 [`industries/web-novel/`](industries/web-novel/README.md) 是第二个行业包，用来验证 skill 不是只对煤层气有效。假设客户是「某中型网络文学平台（付费 + 免费混合）」；同样没有客户文档，**0 个已校准术语**，所有规划标了 自述/转述/推断。
 
-包含：27 条来源、77 个候选术语（39 public / 36 needs-customer / 2 unsure）、14 家玩家、10 条关系、8 个业务域、25 行活动表（16 列）、15 条待验证、12 张 mermaid 图。
+包含：34 条来源、77 个候选术语（39 public / 36 needs-customer / 2 unsure）、14 家玩家（含赛道/收入结构/用户画像总览）、10 条关系、8 个业务域、25 行活动表（16 列）+ 10 个关键环节展开（带真实例子）、15 条待验证、12 张 mermaid 图。
 
 ## 完整跑通的运行（两个行业）
 
 - [`examples/coalbed-methane-run/`](examples/coalbed-methane-run/README.md)：煤层气，31 条来源、78 个术语、36 行活动表；
-- [`examples/web-novel-run/`](examples/web-novel-run/README.md)：网络文学，27 条来源、77 个术语、25 行活动表。
+- [`examples/web-novel-run/`](examples/web-novel-run/README.md)：网络文学，34 条来源、77 个术语、25 行活动表。
 
 两个都是从 `init_ramp.py` 生成、走完四步、通过 `validate_artifacts.py --strict` 和 `readiness.py --check` 的完整 `ramp/` 示例。都含 5 处**模拟访谈**修正（已标注是虚构示例，只演示记录格式）。
 
 ## 当前状态
 
-- ✅ **v0.6.0（当前）**：M1.5 适配层完成——`dsh-industry-research` / `dsh-scout` / `dsh-kb` 的具体接法、两个导入器和兼容说明；前面已完成方案模式、两个行业包与两个完整示例。
+- ✅ **v0.7.0（当前）**：网文包补充玩家赛道/收入/画像 + 10 个关键环节真实例子；skill 同步增加玩家画像与环节例子指引；M1.5 适配层已完成。
 - ⏭ **下一步**：在真实环境安装三个插件做一次实测（沙箱里只能做离线导入验证）；然后把方案模式补进示例；最后插件化（M2/M3），见 `plugin/roadmap.md`。
 
 ## 已知限制
