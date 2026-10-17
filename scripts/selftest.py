@@ -169,6 +169,50 @@ def main() -> int:
             "prose ❓ not counted as guessed node",
             flow_guess_count("| 节点 | 说明 |\n|---|---|\n| A | 这里提到 ❓ 但这不是信心列 |\n") == 0,
         )
+
+        # ---- M1.5 importers ----
+        imp = tmp / "import"
+        imp.mkdir()
+        chain = {
+            "industry": "测试行业",
+            "nodes": [
+                {"id": "n1", "name": "上游A", "tier": "upstream",
+                 "metrics": [{"key": "规模", "value": 12, "unit": "亿元", "sourceRef": "S1"}, {"key": "毛利率"}]},
+                {"id": "n2", "name": "中游B", "tier": "midstream",
+                 "metrics": [{"key": "产量", "value": 3, "unit": "万吨", "sourceRef": "S2"}]},
+            ],
+            "edges": [{"from": "n1", "to": "n2", "note": "原料供应"}],
+        }
+        (imp / "chain.json").write_text(json.dumps(chain, ensure_ascii=False), encoding="utf-8")
+        (imp / "sources.json").write_text(
+            json.dumps({"next": 3, "items": [
+                {"ref": "S1", "origin": "https://example.com/a", "capturedAt": "2026-10-01", "note": "来源A"},
+                {"ref": "S2", "origin": "https://example.com/b", "capturedAt": "2026-10-02", "note": "来源B"},
+            ]}, ensure_ascii=False), encoding="utf-8")
+        r = run("import_industry_map.py", "--chain", str(imp / "chain.json"),
+                "--sources", str(imp / "sources.json"), "--out-dir", str(imp))
+        check("import industry_map chain", r.returncode == 0 and "上游A" in (imp / "chain-seed.md").read_text(encoding="utf-8"),
+              r.stdout + r.stderr)
+        check("import industry_map sources -> S01", (imp / "sources-imported.jsonl").read_text(encoding="utf-8").count('"S01"') == 1)
+
+        case = {
+            "schemaVersion": "dsh-scout.case.v0", "caseId": "acme", "title": "ACME 尽调", "language": "zh",
+            "decisionObjective": "判断是否推进",
+            "subject": {"name": "ACME", "identityStatus": "needs_verification", "identitySourceIds": []},
+            "role": {"title": "技术负责人", "location": "深圳", "fitQuestion": "值得去吗"},
+            "decision": "VERIFY", "decisionReason": "主体未核验",
+            "sources": [{"sourceId": "s1", "type": "official_filing", "title": "年报",
+                         "url": "https://example.com/report", "capturedAt": "2026-10-01",
+                         "evidenceLevel": "E2", "status": "ok"}],
+            "claims": [{"claimId": "c1", "text": "营收 1 亿", "status": "reported", "evidenceLevel": "E2",
+                        "dimension": "company_and_founder", "impact": "material", "sourceIds": ["s1"],
+                        "nextAction": "核对页码", "confidenceNote": "媒体"}],
+            "interviewQuestions": ["数据口径是什么？"],
+        }
+        (imp / "case.json").write_text(json.dumps(case, ensure_ascii=False), encoding="utf-8")
+        r = run("import_scout_case.py", "--case", str(imp / "case.json"), "--out-dir", str(imp))
+        check("import scout case", r.returncode == 0 and "数据口径" in (imp / "scout-import.md").read_text(encoding="utf-8"),
+              r.stdout + r.stderr)
         check(
             "verification-table ❓ not counted as flow node",
             flow_guess_count(

@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.6.0 · 2026-10-18
+
+- M1.5 适配层：新增 `references/adapters.md`，写清 `dsh-industry-research`（`industry_map`/`industry_track`/`company_scan`）、`dsh-scout`（12 个 `scout_*`、E0–E3）、`dsh-kb` 的具体接法、导出路径、证据等级映射与兼容风险。
+- 新增导入器 `scripts/import_industry_map.py`：把 `chain.json` + `sources.json` 转成 `chain-seed.md` / `chain-seed.mmd` / `sources-imported.jsonl`；ref 自动归一为 `S01`。
+- 新增导入器 `scripts/import_scout_case.py`：把 `case.json` 转成 `scout-import.md`（来源/主张/访谈问题/合并建议）。
+- SKILL 第 1/2/4 步补「装了插件怎么用」；README / roadmap 同步。
+- `selftest.py` 增至 20 项（新增两个导入器测试）；两个示例仍通过 strict validator。
+- 说明：本会话沙箱不能写 `~/.dsh/profiles`，所以只做了离线导入验证，未在真实 profile 安装三个插件实测。
+
 ## v0.5.0 · 2026-10-18
 
 - 新增「方案模式」第 5 步：四个数字（耗时/日频次/出错率/单次代价）+ 人力单价 → 每天人力成本、风险成本、改进上限；六个 AI 信号；四维打分（业务价值/可行性/数据可得性/政治阻力）；第一项目选「第一象限最靠右」。

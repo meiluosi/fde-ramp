@@ -55,6 +55,7 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 做什么：
 
 1. 读 **3 份行业报告**（2 份近一年的 + 1 份老一点的，看结构变化）；券商的行业深度报告通常结构最好，但别全信。
+   - 如果装了 `dsh-industry-research`：先让 Agent 跑 `industry_map`（可加 `renderSvg: true`）和 `industry_track`，再运行 `scripts/import_industry_map.py` 把 `chain.json` 转成 `chain-seed.md` / `sources-imported.jsonl`，合并进 `chain.md`。见 `references/adapters.md`。
 2. 读**客户年报/招股书/官网**，看客户自己怎么描述业务和收入。
 3. 读**监管文件目录**：只记名字、谁发的、管什么，不细读。
 4. 先画**钱怎么流**：上游/中游/下游，收入从哪来、成本大头在哪、卡在哪。
@@ -84,7 +85,7 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 做什么：
 
 1. 让 AI 先列 60–80 个候选词，来源包括研报、年报，以及**公众号、知乎、B站、播客、行业论坛里的从业者科普**——这些人往往比研报更接近现场叫法。
-2. 用**客户自己的文档**逐个校准（年报、制度、招标文件、招聘 JD）；找不到的标「待客户确认」。
+2. 用**客户自己的文档**逐个校准（年报、制度、招标文件、招聘 JD）；找不到的标「待客户确认」。如果装了 `dsh-kb`，把客户材料放进它的 `raw/`，用 `@raw/...` 或搜索找原句。
 3. 官方文件、研报、公众号都只能算「公开说法」；**只有客户/一线确认过，才算「已校准」**。
 4. 每个词补「最容易搞混的近邻词」，写成「A 不是 B，因为……」；写不出区别就标「不确定」。
 5. 从业者文章可以帮你找词，但**不能作为关键数字的唯一来源**；要标作者、日期，分清科普和软文。
@@ -143,7 +144,8 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 3. 记下改前/改后，回来写进 `corrections.md`。
 4. 追问：还有谁会不同意这张图？有没有哪份文件能一锤定音？我下次还容易错在哪？
 5. 回来把改动写回 `chain.md` / `domains.md` / `flow.md` / `activities.md`；没解决的进 `verification-list.md`。
-6. 如果要做方案：**顺手把重点环节的四个数字问出来**——耗时、日频次、出错率、单次代价；再问清「这一步谁做、什么职级」，回去找 HR/财务要人力单价。问法见 `references/opportunity-analysis.md`。
+6. 如果装了 `dsh-scout`：先用它做公司主体核验/证据分级/访谈问题，再运行 `scripts/import_scout_case.py` 生成 `scout-import.md`，把未核实项并进 `verification-list.md`。见 `references/adapters.md`。
+7. 如果要做方案：**顺手把重点环节的四个数字问出来**——耗时、日频次、出错率、单次代价；再问清「这一步谁做、什么职级」，回去找 HR/财务要人力单价。问法见 `references/opportunity-analysis.md`。
 
 验收：至少拿到 5 处实质修正，每处都知道「为什么」。
 
@@ -234,7 +236,7 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 | `material-audit` | 客户给了架构/流程/制度文档，先抽结构、找缺口 | 用本 skill 的流程模板手工抽 |
 | `gap-rehearsal` | 把「必须拍板」的问题做成决策演练 | 用 `open-questions.md` 自问自答 |
 
-没有这些工具也能跑。组合细节见 `references/integrations.md`。
+没有这些工具也能跑。具体接法（工具名、导出路径、导入脚本）见 `references/adapters.md`；原则性说明见 `references/integrations.md`。
 
 ---
 

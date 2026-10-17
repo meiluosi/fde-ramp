@@ -117,7 +117,7 @@ dsh-fde-ramp/
 | **M0 skill MVP（✅ 已完成，v0.3.3）** | SKILL.md + references + templates + scripts + 煤层气案例 + 端到端 `ramp/` 示例 | `examples/coalbed-methane-run/` 通过 strict validator 与 readiness；selftest 17/17 |
 | **M0.5 真实试跑（用户判断可跳过）** | 原计划用真实客户走一遍；用户判断当前版本已可用，跳过 | —（保留为以后可选） |
 | **M1 可复制（✅ 已完成，v0.4.0）** | 第二个行业包：网络文学 / 网文写作；「没有客户资料」的走法已写进 SKILL | 行业包 27 条来源、77 词、25 行活动；`examples/web-novel-run/` 通过 strict + readiness |
-| **M1.5 组合现有插件** | 接 `dsh-industry-research`（产业链/政策/公司卡）、`dsh-scout`（证据分级/主体核验）、`dsh-kb`（素材沉淀） | 用同一行业对比：接插件后 第 1–3 步 的耗时/来源覆盖率有明显改善 |
+| **M1.5 组合现有插件（✅ 适配层完成，待安装实测）** | `references/adapters.md` + `import_industry_map.py` / `import_scout_case.py`；接 `dsh-industry-research` / `dsh-scout` / `dsh-kb` | 离线导入器已用样例测试；待真实环境安装三插件跑一次对比 |
 | **M2 工具化** | `ramp_*` Host 工具（含 `ramp_metrics` / `ramp_opportunities` / `ramp_case`）；状态/校验/评分自动化 | 工具可独立跑，skill 调用工具 |
 | **M3 UI** | 就绪度面板、术语卡、链路/关系图、活动表、待验证看板、演练室 | Web 面板可用，状态与文件同步 |
 | **M4 发布** | npm 包 + 市场索引 + 文档站 | 外部用户可一键安装并跑通 |

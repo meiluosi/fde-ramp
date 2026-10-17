@@ -71,7 +71,7 @@ python3 scripts/init_ramp.py --industry "煤层气" --customer "某公司" \
 python3 scripts/render_sources.py --root ramp   # 生成 sources.md（人看的来源清单）
 python3 scripts/validate_artifacts.py --root ramp
 python3 scripts/readiness.py --root ramp
-python3 scripts/selftest.py        # 17 项自测
+python3 scripts/selftest.py        # 20 项自测
 
 # 可选：算某个环节的成本/改进上限
 python3 scripts/calc_process.py --minutes 12 --freq 200 --error-rate 0.03 --cost-per-error 50 --hourly-rate 60
@@ -95,14 +95,17 @@ fde-ramp/
     integrations.md            # 和现有插件/技能配合
     source-hunting.md          # 去哪找报告、客户材料、监管文件
     opportunity-analysis.md    # 四个数字、六个 AI 信号、四维打分、第一项目选择
+    adapters.md                # 与 dsh-industry-research / dsh-scout / dsh-kb 的具体接法
   templates/                   # 空模板（AI 填）
   scripts/
     init_ramp.py               # 生成 ramp/ 工作区
     render_sources.py          # 从 sources.jsonl 生成人看的 sources.md
+    import_industry_map.py     # 把 dsh-industry-research 的 chain.json 转成 ramp 种子
+    import_scout_case.py       # 把 dsh-scout 的 case.json 转成 ramp 草稿
     validate_artifacts.py      # 检查来源引用、空模板、数量
     readiness.py               # 五个维度 + 证据够不够
     calc_process.py            # 算某环节的人力/风险成本与改进上限
-    selftest.py                # 17 项自测，CI 入口
+    selftest.py                # 20 项自测，CI 入口
   industries/
     coalbed-methane/           # 煤层气：AI 填好的公开源示例（不是模板）
     web-novel/                 # 网络文学：第二个行业包（验证通用性）
@@ -154,8 +157,8 @@ fde-ramp/
 
 ## 当前状态
 
-- ✅ **v0.5.0（当前）**：新增「方案模式」第 5 步——四个数字算改进上限、六个 AI 信号、四维打分、第一项目选择；附算账脚本、模板和一页纸方案。前面已完成两个行业包与两个完整示例。
-- ⏭ **下一步**：把方案模式补进示例/第二个行业（可选）；然后组合 `dsh-industry-research` / `dsh-scout` / `dsh-kb`（M1.5），再做插件化，见 `plugin/roadmap.md`。
+- ✅ **v0.6.0（当前）**：M1.5 适配层完成——`dsh-industry-research` / `dsh-scout` / `dsh-kb` 的具体接法、两个导入器和兼容说明；前面已完成方案模式、两个行业包与两个完整示例。
+- ⏭ **下一步**：在真实环境安装三个插件做一次实测（沙箱里只能做离线导入验证）；然后把方案模式补进示例；最后插件化（M2/M3），见 `plugin/roadmap.md`。
 
 ## 已知限制
 
