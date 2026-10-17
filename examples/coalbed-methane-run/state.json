@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "industry": "煤层气",
+  "customer": "某省属煤层气公司（示例）",
+  "persona": "技术负责人（示例）",
+  "deadline": "见客户前",
+  "started": "2026-10-18",
+  "blocks": {
+    "map": "done",
+    "glossary": "done",
+    "flow": "done",
+    "negate": "done",
+    "brief": "done"
+  },
+  "dimensions": {
+    "structure": 3,
+    "language": 3,
+    "players": 3,
+    "decision": 3,
+    "dialogue": 3
+  },
+  "counts": {
+    "terms": 78,
+    "sources": 31,
+    "verification_items": 15,
+    "corrections": 5,
+    "drills": 0,
+    "players": 15,
+    "relations": 20,
+    "domains": 8,
+    "activities": 36
+  },
+  "artifacts": {
+    "plan": "plan.md",
+    "sources": "sources.jsonl",
+    "sources_md": "sources.md",
+    "value_chain": "value-chain.md",
+    "value_chain_mmd": "value-chain.mmd",
+    "chain": "chain.md",
+    "chain_mmd": "chain.mmd",
+    "domains": "domains.md",
+    "activities": "activities.md",
+    "glossary": "glossary.md",
+    "flow": "flow.md",
+    "flow_mmd": "flow.mmd",
+    "verification_list": "verification-list.md",
+    "corrections": "corrections.md",
+    "open_questions": "open-questions.md",
+    "brief": "brief.md",
+    "readiness": "readiness.md",
+    "drill_scorecard": "drill-scorecard.md",
+    "calibration_log": "calibration-log.md"
+  },
+  "gaps": []
+}

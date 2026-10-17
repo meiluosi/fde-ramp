@@ -1,0 +1,16 @@
+flowchart LR
+  subgraph 上游
+    A[资源评价] --> B[矿权]
+    B --> C[勘探]
+    C --> D[钻井]
+    D --> E[压裂]
+  end
+  subgraph 中游
+    E --> F[排采]
+    F --> G[集输/增压]
+    G --> H[净化/液化/发电]
+  end
+  subgraph 下游
+    H --> I[管道/工业]
+    H --> J[电厂/燃气]
+  end
