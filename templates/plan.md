@@ -14,6 +14,7 @@
 | 第 2 步 · 行话小抄 | 约 50 词，人话 + 近邻辨析 | `glossary.md` `calibration-log.md` | [ ] |
 | 第 3 步 · 拆业务 | 业务域 + 流程 + 活动表 + 待验证 | `domains.md` `flow.md` `activities.md` `verification-list.md` | [ ] |
 | 第 4 步 · 去被改 | ≥5 处实质修正 | `corrections.md` + 改过的图/表 | [ ] |
+| 第 5 步（可选） · 算账找机会 | 四个数字 / 六个信号 / 四维打分 / 第一项目 | `process-metrics.md` `opportunities.md` `business-case.md` | [ ] |
 | 收尾 | 一页纸 + 自检 | `brief.md` `readiness.md` | [ ] |
 
 ## 每一步的检查

@@ -49,7 +49,10 @@
     "brief": "ramp/brief.md",
     "readiness": "ramp/readiness.md",
     "drill_scorecard": "ramp/drill-scorecard.md",
-    "calibration_log": "ramp/calibration-log.md"
+    "calibration_log": "ramp/calibration-log.md",
+    "process_metrics": "ramp/process-metrics.md",
+    "opportunities": "ramp/opportunities.md",
+    "business_case": "ramp/business-case.md"
   },
   "gaps": []
 }

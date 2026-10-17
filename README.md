@@ -29,6 +29,18 @@
 
 **不设固定时长。** 资料少就快，约不到人就慢；但第 4 步不能省——没有它，前面三步只是练习。
 
+### 可选第 5 步：方案模式（算账 + 找机会）
+
+如果目标不只是「能对话」，而是「给客户提 AI 改造方案」，加做第 5 步：
+
+- 给重点环节标四个数字：**耗时、日频次、出错率、单次代价**；再问「谁做、什么职级」，找 HR/财务要**人力单价**；
+- 算两个成本：`每天人力成本 = 耗时÷60×日频次×人力单价`，`每天风险成本 = 出错率×日频次×单次代价`，相加是**改进上限**；
+- 用六个信号找 AI 机会（重复人工判断 / 信息散在多系统 / 大量非结构化文档 / 有标准但靠人记 / 流程大量等待 / 有人在偷偷自救）；
+- 四个维度打分：业务价值、可行性、数据可得性、政治阻力；数据/政治红灯先解决；
+- 第一个项目选**第一象限最靠右**的（最容易落地），不是最靠上的。
+
+详见 [opportunity-analysis.md](references/opportunity-analysis.md)，模板在 `templates/process-metrics.md` / `templates/opportunities.md` / `templates/business-case.md`。
+
 ## 谁填？
 
 - **AI 填大头**：查资料、填地图、整理小抄、画流程、拆活动表、标出猜测、写会前 brief。
@@ -60,6 +72,9 @@ python3 scripts/render_sources.py --root ramp   # 生成 sources.md（人看的�
 python3 scripts/validate_artifacts.py --root ramp
 python3 scripts/readiness.py --root ramp
 python3 scripts/selftest.py        # 17 项自测
+
+# 可选：算某个环节的成本/改进上限
+python3 scripts/calc_process.py --minutes 12 --freq 200 --error-rate 0.03 --cost-per-error 50 --hourly-rate 60
 ```
 
 若已作为 skill 安装，脚本在 `~/.dsh/skills/fde-ramp/scripts/` 下，可在任意工作区用绝对路径调用。
@@ -79,12 +94,14 @@ fde-ramp/
     personas.md                # 一线/技术/商务/管理层等角色
     integrations.md            # 和现有插件/技能配合
     source-hunting.md          # 去哪找报告、客户材料、监管文件
+    opportunity-analysis.md    # 四个数字、六个 AI 信号、四维打分、第一项目选择
   templates/                   # 空模板（AI 填）
   scripts/
     init_ramp.py               # 生成 ramp/ 工作区
     render_sources.py          # 从 sources.jsonl 生成人看的 sources.md
     validate_artifacts.py      # 检查来源引用、空模板、数量
     readiness.py               # 五个维度 + 证据够不够
+    calc_process.py            # 算某环节的人力/风险成本与改进上限
     selftest.py                # 17 项自测，CI 入口
   industries/
     coalbed-methane/           # 煤层气：AI 填好的公开源示例（不是模板）
@@ -137,8 +154,8 @@ fde-ramp/
 
 ## 当前状态
 
-- ✅ **v0.4.0（当前）**：第二个行业包（网络文学）+ 第二个完整 `ramp/` 示例完成；skill 已用两个行业验证过。
-- ⏭ **下一步**：组合 `dsh-industry-research` / `dsh-scout` / `dsh-kb` 做适配层（M1.5），然后插件化（`ramp_*` 工具 + 面板 + npm），见 `plugin/roadmap.md`。
+- ✅ **v0.5.0（当前）**：新增「方案模式」第 5 步——四个数字算改进上限、六个 AI 信号、四维打分、第一项目选择；附算账脚本、模板和一页纸方案。前面已完成两个行业包与两个完整示例。
+- ⏭ **下一步**：把方案模式补进示例/第二个行业（可选）；然后组合 `dsh-industry-research` / `dsh-scout` / `dsh-kb`（M1.5），再做插件化，见 `plugin/roadmap.md`。
 
 ## 已知限制
 

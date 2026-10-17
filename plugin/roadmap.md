@@ -33,6 +33,9 @@
 | `ramp_flow` | op=draft/update, confidence? | flow.md + flow.mmd + verification-list.md | 每个节点强制标 ✅/⚠️/❓ |
 | `ramp_verify` | itemId, result, evidence?, person? | 更新 verification-list + state | 记录被推翻/确认 |
 | `ramp_drill` | persona, difficulty, rounds | drill-scorecard.md + 可选 drills/*.md | 角色扮演 + 评分 |
+| `ramp_metrics` | activities + 客户数字 | process-metrics.md（四个数字/成本/上限） | 算账 |
+| `ramp_opportunities` | 六个信号 + 四维打分 | opportunities.md（象限/第一项目） | 找机会 |
+| `ramp_case` | 客户数字 + 选择 | business-case.md | 一页纸方案 |
 | `ramp_brief` | meeting, audience, goal | brief.md | 一页纸 |
 | `ramp_score` | auto/evidence | readiness.md + state | 五维评分与门槛 |
 | `ramp_status` | — | 当前阶段/计数/缺口 | 给模型与会话面板用 |
@@ -60,6 +63,9 @@ ramp/
   corrections.md
   brief.md
   readiness.md
+  process-metrics.md  # 四个数字 + 成本/改进上限
+  opportunities.md    # 六个信号 + 四维打分 + 第一项目
+  business-case.md    # 一页纸方案
   drill-scorecard.md  # 对话演练评分卡（当前 skill 版）
   drills/             # 可选：每次演练的 transcript + 分数（插件版）
 ```
@@ -74,6 +80,7 @@ ramp/
 - **术语卡**：翻卡模式、状态筛选（needs-customer 优先）、近邻辨析；
 - **全链路图**：分段/玩家/关系，点击玩家看现状与规划来源（自述/转述/推断）；
 - **业务域与活动表**：域地图 + 可编辑活动表（做什么/谁做/影响谁/工具/背景/频率/异常/交接/验收/外包），❓ 行高亮；
+- **算账与机会**：四个数字表 + 成本/改进上限 + 六信号打勾 + 四维打分 + 象限图；第一项目高亮；
 - **流程图**：渲染 mermaid，❓ 节点高亮；点击标记「已验证/被推翻」；
 - **待验证看板**：按风险×成本排序，拖到「已问/已确认/被推翻」；
 - **演练室**：选人设 → 多轮对话 → 自动评分卡；
@@ -110,8 +117,8 @@ dsh-fde-ramp/
 | **M0 skill MVP（✅ 已完成，v0.3.3）** | SKILL.md + references + templates + scripts + 煤层气案例 + 端到端 `ramp/` 示例 | `examples/coalbed-methane-run/` 通过 strict validator 与 readiness；selftest 17/17 |
 | **M0.5 真实试跑（用户判断可跳过）** | 原计划用真实客户走一遍；用户判断当前版本已可用，跳过 | —（保留为以后可选） |
 | **M1 可复制（✅ 已完成，v0.4.0）** | 第二个行业包：网络文学 / 网文写作；「没有客户资料」的走法已写进 SKILL | 行业包 27 条来源、77 词、25 行活动；`examples/web-novel-run/` 通过 strict + readiness |
-| **M1.5 组合现有插件** | 接 `dsh-industry-research`（产业链/政策/公司卡）、`dsh-scout`（证据分级/主体核验）、`dsh-kb`（素材沉淀） | 用同一行业对比：接插件后 Block 1–3 的耗时/来源覆盖率有明显改善 |
-| **M2 工具化** | `ramp_*` Host 工具；状态/校验/评分自动化 | 工具可独立跑，skill 调用工具 |
+| **M1.5 组合现有插件** | 接 `dsh-industry-research`（产业链/政策/公司卡）、`dsh-scout`（证据分级/主体核验）、`dsh-kb`（素材沉淀） | 用同一行业对比：接插件后 第 1–3 步 的耗时/来源覆盖率有明显改善 |
+| **M2 工具化** | `ramp_*` Host 工具（含 `ramp_metrics` / `ramp_opportunities` / `ramp_case`）；状态/校验/评分自动化 | 工具可独立跑，skill 调用工具 |
 | **M3 UI** | 就绪度面板、术语卡、链路/关系图、活动表、待验证看板、演练室 | Web 面板可用，状态与文件同步 |
 | **M4 发布** | npm 包 + 市场索引 + 文档站 | 外部用户可一键安装并跑通 |
 
@@ -131,7 +138,8 @@ dsh-fde-ramp/
 - 客户侧盲评：10 个问题的质量 ≥ 4/5；
 - time-to-conversation-ready（自报 + 同伴评）；
 - 全链路玩家/关系覆盖（≥10 / ≥5）；
-- 业务域覆盖（≥3）与活动行数（≥15）。
+- 业务域覆盖（≥3）与活动行数（≥15）；
+- 方案模式：重点环节四个数字覆盖率、改进上限合计、第一项目选择理由。
 
 **质量红线**：
 
@@ -145,8 +153,8 @@ dsh-fde-ramp/
 
 1. **第二个行业包（✅ 已完成）**：网络文学 / 网文写作；行业包 + 完整 `ramp/` 示例均通过严格检查。真实试跑按用户判断跳过。
 2. **（可选）真实试跑**：以后有真实客户时再补；第 4 步仍然必须由人做。
-3. **组合现有插件**：`dsh-industry-research` / `dsh-scout` / `dsh-kb`，先把 Block 1–3 的重复劳动降下来；这一步不改 skill 的对外形态，只加适配层。
-4. **插件化 M2/M3**：把成熟的工具（`ramp_chain` / `ramp_activities` / `ramp_score`）先包成 Host 工具，再做 UI；不要一上来做完整面板。
+3. **组合现有插件**：`dsh-industry-research` / `dsh-scout` / `dsh-kb`，先把 第 1–3 步 的重复劳动降下来；这一步不改 skill 的对外形态，只加适配层。
+4. **插件化 M2/M3**：把成熟的工具（`ramp_chain` / `ramp_activities` / `ramp_metrics` / `ramp_opportunities` / `ramp_score`）先包成 Host 工具，再做 UI；不要一上来做完整面板。
 5. **发布 M4**：npm + 市场索引 + 文档站；先小范围给 3–5 个 FDE 试用，再公开。
 
 **决策点**：

@@ -120,7 +120,8 @@ def main() -> int:
         expected = {"plan.md", "state.json", "sources.jsonl", "sources.md", "value-chain.md", "value-chain.mmd",
                     "chain.md", "chain.mmd", "domains.md", "activities.md", "glossary.md",
                     "flow.md", "flow.mmd", "verification-list.md", "corrections.md", "open-questions.md",
-                    "brief.md", "readiness.md", "drill-scorecard.md", "calibration-log.md"}
+                    "brief.md", "readiness.md", "drill-scorecard.md", "calibration-log.md",
+                    "process-metrics.md", "opportunities.md", "business-case.md"}
         check("init generates required files", expected <= {p.name for p in fresh.iterdir()})
 
         r = run("validate_artifacts.py", "--root", str(fresh))

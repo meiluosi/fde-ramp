@@ -37,6 +37,9 @@ FILES = {
     "readiness.md": "readiness.md",
     "drill-scorecard.md": "drill-scorecard.md",
     "calibration-log.md": "calibration-log.md",
+    "process-metrics.md": "process-metrics.md",
+    "opportunities.md": "opportunities.md",
+    "business-case.md": "business-case.md",
 }
 
 

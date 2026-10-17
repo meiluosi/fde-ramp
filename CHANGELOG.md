@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.5.0 · 2026-10-18
+
+- 新增「方案模式」第 5 步：四个数字（耗时/日频次/出错率/单次代价）+ 人力单价 → 每天人力成本、风险成本、改进上限；六个 AI 信号；四维打分（业务价值/可行性/数据可得性/政治阻力）；第一项目选「第一象限最靠右」。
+- 新增 `references/opportunity-analysis.md`（问法、公式、算例、六个信号、红灯规则、第一项目逻辑、常见坑）。
+- 新增模板 `templates/process-metrics.md`、`templates/opportunities.md`、`templates/business-case.md`。
+- 新增脚本 `scripts/calc_process.py`，可算单环节成本/上限。
+- SKILL / README / QUICKSTART / method / plan 模板 / plugin roadmap 同步；仍是同一个 skill，不拆成多个。
+- `init_ramp.py` 生成文件增至 23 个；selftest 17 项仍通过。
+
 ## v0.4.0 · 2026-10-18
 
 - 第二个行业包：`industries/web-novel/`（网络文学 / 网文写作），27 条来源、77 个候选术语（0 verified）、14 家玩家、10 条关系、8 个业务域、25 行活动表（16 列）、15 条待验证、12 张 mermaid。
