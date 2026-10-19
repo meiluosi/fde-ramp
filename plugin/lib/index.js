@@ -13,7 +13,7 @@ import { resolve } from 'node:path'
 import { defineTool } from '@deepseek-ai/dsh-tools'
 import z from '@deepseek-ai/schemastery'
 import { activityStats, chainStats, metricsStats, opportunityStats } from './parse.js'
-import { updateActivities, updateMetrics } from './edit.js'
+import { diffLines, updateActivities, updateActivitiesBatch, updateMetrics, updateMetricsBatch } from './edit.js'
 
 export const name = 'dsh-fde-ramp'
 export const inject = ['tools']
@@ -50,6 +50,13 @@ async function countLines(path) {
   } catch {
     return 0
   }
+}
+
+async function writeBackup(ctx, exec, root, fileName, content) {
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-')
+  const path = resolve(root, `.${fileName}.${stamp}.bak`)
+  await writeWithPolicy(ctx, exec, path, content)
+  return path
 }
 
 async function writeWithPolicy(ctx, exec, filePath, content) {
@@ -407,6 +414,141 @@ export function apply(ctx, config = {}) {
           oldValue: result.oldValue,
           newValue: result.newValue,
           note: '已写入 activities.md（只改一个单元格）。',
+        }
+      },
+    }))
+
+    yield ctx.tools.register(defineTool({
+      name: 'ramp_metrics_batch',
+      description: '批量更新 process-metrics.md 的多个环节数字，重算成本列；写前自动备份，支持 dryRun 预览 diff。会写入文件（dryRun 除外）。',
+      parameters: {
+        root: { type: 'string', description: 'ramp 工作区路径；默认取配置 root' },
+        dryRun: { type: 'boolean', description: '只预览 diff，不写文件、不备份' },
+        updates: {
+          type: 'array',
+          required: true,
+          description: '更新列表；每项与 ramp_metrics_update 参数相同',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' }, activity: { type: 'string' },
+              minutes: { type: 'number' }, frequency: { type: 'number' },
+              errorRate: { type: 'number' }, costPerError: { type: 'number' },
+              hourlyRate: { type: 'number' }, who: { type: 'string' },
+            },
+            additionalProperties: false,
+          },
+        },
+      },
+      output: {
+        schema: {
+          type: 'object',
+          properties: {
+            root: { type: 'string', required: true },
+            count: { type: 'number', required: true },
+            dryRun: { type: 'boolean', required: true },
+            backup: { type: 'string', required: true },
+            diff: { type: 'string', required: true },
+            note: { type: 'string', required: true },
+          },
+          additionalProperties: false,
+        },
+        render: (_args, value) => [{
+          type: 'text',
+          text: `${value.dryRun ? 'preview' : 'updated'} ${value.count} rows in ${value.root}\n`
+            + (value.backup ? `backup: ${value.backup}\n` : '')
+            + `diff:\n${value.diff}`,
+        }],
+      },
+      async execute(args, exec) {
+        const cwd = sessionCwd(exec)
+        const root = resolve(cwd, args.root || settings.root)
+        const updates = Array.isArray(args.updates) ? args.updates : []
+        if (updates.length === 0) throw new Error('updates 不能为空')
+        const path = resolve(root, 'process-metrics.md')
+        const text = await readText(path)
+        if (text === undefined) throw new Error(`没有 process-metrics.md: ${path}`)
+        const result = updateMetricsBatch(text, updates)
+        const diff = diffLines(text, result.markdown)
+        const dryRun = args.dryRun === true
+        let backup = ''
+        if (!dryRun) {
+          backup = await writeBackup(ctx, exec, root, 'process-metrics.md', text)
+          await writeWithPolicy(ctx, exec, path, result.markdown)
+        }
+        return {
+          root,
+          count: result.results.length,
+          dryRun,
+          backup,
+          diff,
+          note: dryRun ? '预览模式：没有写文件。' : '已写文件；备份是隐藏文件，可手动恢复。',
+        }
+      },
+    }))
+
+    yield ctx.tools.register(defineTool({
+      name: 'ramp_activities_batch',
+      description: '批量编辑 activities.md 的多个单元格；写前自动备份，支持 dryRun 预览 diff。会写入文件（dryRun 除外）。',
+      parameters: {
+        root: { type: 'string', description: 'ramp 工作区路径；默认取配置 root' },
+        dryRun: { type: 'boolean', description: '只预览 diff，不写文件、不备份' },
+        updates: {
+          type: 'array',
+          required: true,
+          description: '更新列表；每项是 {activity, column, value}',
+          items: {
+            type: 'object',
+            properties: {
+              activity: { type: 'string' }, column: { type: 'string' }, value: { type: 'string' },
+            },
+            additionalProperties: false,
+          },
+        },
+      },
+      output: {
+        schema: {
+          type: 'object',
+          properties: {
+            root: { type: 'string', required: true },
+            count: { type: 'number', required: true },
+            dryRun: { type: 'boolean', required: true },
+            backup: { type: 'string', required: true },
+            diff: { type: 'string', required: true },
+            note: { type: 'string', required: true },
+          },
+          additionalProperties: false,
+        },
+        render: (_args, value) => [{
+          type: 'text',
+          text: `${value.dryRun ? 'preview' : 'updated'} ${value.count} cells in ${value.root}\n`
+            + (value.backup ? `backup: ${value.backup}\n` : '')
+            + `diff:\n${value.diff}`,
+        }],
+      },
+      async execute(args, exec) {
+        const cwd = sessionCwd(exec)
+        const root = resolve(cwd, args.root || settings.root)
+        const updates = Array.isArray(args.updates) ? args.updates : []
+        if (updates.length === 0) throw new Error('updates 不能为空')
+        const path = resolve(root, 'activities.md')
+        const text = await readText(path)
+        if (text === undefined) throw new Error(`没有 activities.md: ${path}`)
+        const result = updateActivitiesBatch(text, updates)
+        const diff = diffLines(text, result.markdown)
+        const dryRun = args.dryRun === true
+        let backup = ''
+        if (!dryRun) {
+          backup = await writeBackup(ctx, exec, root, 'activities.md', text)
+          await writeWithPolicy(ctx, exec, path, result.markdown)
+        }
+        return {
+          root,
+          count: result.results.length,
+          dryRun,
+          backup,
+          diff,
+          note: dryRun ? '预览模式：没有写文件。' : '已写文件；备份是隐藏文件，可手动恢复。',
         }
       },
     }))

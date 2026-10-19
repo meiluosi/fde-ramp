@@ -8,7 +8,9 @@
 - `ramp_metrics({ root?, days? })`：读 `process-metrics.md`，算每天人力/风险成本、改进上限、年化；
 - `ramp_opportunities({ root? })`：读 `opportunities.md`，数信号/四维/红灯，按「第一象限最靠右」给第一项目；
 - `ramp_metrics_update({ root?, id?/activity?, minutes?, frequency?, errorRate?, costPerError?, hourlyRate?, who? })`：写回四个数字/人力单价，并重算三个成本列；
-- `ramp_activities_update({ root?, activity, column, value })`：按活动名和列名改一个单元格。
+- `ramp_activities_update({ root?, activity, column, value })`：按活动名和列名改一个单元格；
+- `ramp_metrics_batch({ root?, updates[], dryRun? })`：批量改数字，自动重算；写前备份、支持 diff 预览；
+- `ramp_activities_batch({ root?, updates[], dryRun? })`：批量改单元格，写前备份、支持 diff 预览。
 
 ## 还没做
 
@@ -29,13 +31,27 @@ node --check plugin/lib/index.js
 node --test plugin/test/parse.test.mjs
 ```
 
-当前 11 项单测（解析 6 + 编辑 5）全过；真实 DSH profile 调用记录见 [`../docs/m15-plugin-live-test.md`](../docs/m15-plugin-live-test.md)。
+当前 13 项单测（解析 6 + 编辑 7）全过；真实 DSH profile 调用记录见 [`../docs/m15-plugin-live-test.md`](../docs/m15-plugin-live-test.md)。
 
-装进 DSH profile（CLI）：
+装进 DSH profile：
 
 ```bash
+# web / tui 等非 Electron 管理的 profile
 dsh plugin --profile web add /absolute/path/to/fde-ramp/plugin
 ```
+
+桌面 App 的 `desktop` profile 由 Electron 独占管理，CLI 会拒绝：
+
+```text
+error: profile "desktop" is managed exclusively by the Electron application
+```
+
+当前已验证的手工安装方式（2026-10-19）：
+
+1. 备份 `~/.dsh/profiles/desktop/{package.json,cordis.patch.yml,pnpm-lock.yaml}`；
+2. 把 `plugin/` 复制到 `~/.dsh/profiles/desktop/node_modules/dsh-fde-ramp/`；
+3. 在 profile 的 `package.json` dependencies 加 `"dsh-fde-ramp": "file:/.../plugin"`，并在 `dsh.profile.bundles` 末尾加 `"dsh-fde-ramp"`；
+4. 重启/热加载 DSH 后，工具列表里出现 `ramp_status` 等工具。
 
 > 本仓库还没有把该包发布到 npm；先本地路径安装/测试。
 

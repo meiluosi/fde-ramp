@@ -87,6 +87,33 @@ updated 人工复核 / 信心
 ❓ -> ✅
 ```
 
+## 3.6 批量写 + 备份 + diff 预览
+
+真实验证 `ramp_metrics_batch`（dryRun=true 再 false）：
+
+```text
+preview 2 rows in /tmp/m15-plugin-test
+- | A01 | ... | 12 | ... |
++ | A01 | ... | 15 | ... | 3000.00 | 300.00 | 3300.00 |
+backup: /tmp/m15-plugin-test/.process-metrics.md.2026-...bak
+```
+
+自动写入后：
+
+- `A01`：15 分钟 → 人力 3000 / 风险 300 / 上限 3300；
+- `A02`：人力单价 60 → 1000 / 10 / 1010；
+- `.bak` 文件已实际生成；
+- `ramp_activities_batch` 也验证过，备份与 diff 一致。
+
+## 3.7 M3 静态面板
+
+```bash
+python3 scripts/render_dashboard.py --root /tmp/m15-plugin-test
+# → /tmp/m15-plugin-test/dashboard.html
+```
+
+包含：四个数字表、人力/风险/上限卡片、机会象限 SVG、第一项目建议。目前是独立 HTML，还没嵌进 DSH 侧栏。
+
 ## 4. 没做什么
 
 - **没有改主力 `desktop` profile**；隔离 profile 在 `/tmp`，不持久；
@@ -103,3 +130,34 @@ dsh plugin --profile desktop add /Users/meros/Documents/GitHub/fde-ramp/plugin
 ```
 
 装完重启 DSH，`ramp_status` / `ramp_chain` / `ramp_activities` / `ramp_metrics` / `ramp_opportunities` 就会出现。
+
+
+## 6. 装进主力 desktop profile（2026-10-20）
+
+`dsh plugin --profile desktop add ...` 被拒绝：
+
+```text
+error: profile "desktop" is managed exclusively by the Electron application
+```
+
+改为手工安装（已备份原 profile）：
+
+- 复制 `plugin/` 到 `~/.dsh/profiles/desktop/node_modules/dsh-fde-ramp/`；
+- `package.json` dependencies 加 `"dsh-fde-ramp": "file:/Users/meros/Documents/GitHub/fde-ramp/plugin"`；
+- `dsh.profile.bundles` 追加 `"dsh-fde-ramp"`；
+- 当前 DSH 会话已出现 7 个 `ramp_*` 工具。
+
+当前会话真实调用：
+
+```text
+ramp_status /Users/meros/Documents/GitHub/m15-live/ramp-m15-full-auto
+→ sources: 44  activities: 25  readiness: 3.0 (min 3)
+
+ramp_metrics /tmp/m15-plugin-test
+→ rows: 2 computed: 2; labor/day: 4000 risk/day: 310 ceiling/day: 4310
+
+ramp_opportunities /tmp/m15-plugin-test
+→ count: 3 scored: 3 red: 1; first project: O1
+```
+
+备份在 `/tmp/desktop-profile-backup-20261019-233156/`。

@@ -109,6 +109,7 @@ fde-ramp/
     validate_artifacts.py      # 检查来源引用、空模板、数量
     readiness.py               # 五个维度 + 证据够不够
     calc_process.py            # 算某环节的人力/风险成本与改进上限
+    render_dashboard.py        # 生成 dashboard.html（四数字表 + 机会象限）
     selftest.py                # 23 项自测，CI 入口
   industries/
     coalbed-methane/           # 煤层气：AI 填好的公开源示例（不是模板）
@@ -184,7 +185,7 @@ fde-ramp/
 
 ## 当前状态
 
-- ✅ **v0.9.3（当前）**：M2 读写工具完成——5 个只读 + `ramp_metrics_update` / `ramp_activities_update`；11 项单测；本地 headless 真实读写调用通过；`scout_export` 问题已发上游 #1。
+- ✅ **v0.9.4（当前）**：写工具增强（批量 + 写前备份 + diff 预览）+ M3 静态面板 `dashboard.html`；13 项单测；插件已装入主力 desktop profile，当前会话真实调用通过。
 - ⏭ **下一步**：在真实环境安装三个插件，用 `m15_compose.py` 跑一次真实导出；然后把方案模式补进示例；最后插件化（M2/M3），见 `plugin/roadmap.md`。
 
 ## 已知限制

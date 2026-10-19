@@ -135,3 +135,42 @@ export function updateMetrics(markdown, { id, activity, minutes, frequency, erro
     line: row.line + 1,
   }
 }
+
+/** Simple line diff: changed region only, enough for previews. */
+export function diffLines(before, after) {
+  const a = String(before).split('\n')
+  const b = String(after).split('\n')
+  let start = 0
+  while (start < a.length && start < b.length && a[start] === b[start]) start++
+  let endA = a.length - 1
+  let endB = b.length - 1
+  while (endA >= start && endB >= start && a[endA] === b[endB]) { endA--; endB-- }
+  const out = []
+  for (let i = start; i <= endA; i++) out.push('- ' + a[i])
+  for (let i = start; i <= endB; i++) out.push('+ ' + b[i])
+  return out.join('\n')
+}
+
+/** Apply multiple metrics updates in order. */
+export function updateMetricsBatch(markdown, updates) {
+  let current = markdown
+  const results = []
+  for (const update of updates) {
+    const result = updateMetrics(current, update)
+    current = result.markdown
+    results.push({ id: result.id, activity: result.activity, line: result.line, computed: result.computed })
+  }
+  return { markdown: current, results }
+}
+
+/** Apply multiple activity-cell updates in order. */
+export function updateActivitiesBatch(markdown, updates) {
+  let current = markdown
+  const results = []
+  for (const update of updates) {
+    const result = updateActivities(current, update)
+    current = result.markdown
+    results.push({ activity: result.activity, column: result.column, oldValue: result.oldValue, newValue: result.newValue })
+  }
+  return { markdown: current, results }
+}

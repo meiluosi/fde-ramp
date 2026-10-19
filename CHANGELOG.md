@@ -4,6 +4,15 @@
 
 - 文档：README 增加 FDE Skill 系列导航与跨 Skill 编号约定；无代码改动。
 
+## v0.9.4 · 2026-10-19
+
+- 写工具增强：`ramp_metrics_batch` / `ramp_activities_batch`（批量更新、写前备份 `.bak`、dryRun diff 预览）。
+- M3 静态面板：`scripts/render_dashboard.py` 生成 `dashboard.html`（四个数字表 + 成本卡片 + 机会象限 SVG + 第一项目）。
+- 实测：batch dryRun 与实际写入 diff 一致；备份文件实际生成；A01 15 分钟 → 3000/300/3300。
+- 单测 13 项；plugin 版本 0.3.0；CI 跑全部 Node 测试。
+- 已在主力 desktop profile 手工安装并通过当前会话真实调用（`ramp_status` / `ramp_metrics` / `ramp_opportunities`）。
+- 未做 DSH 客户端侧栏嵌入；面板目前是独立 HTML。
+
 ## v0.9.3 · 2026-10-19
 
 - M2 写工具：`ramp_metrics_update`（四个数字/人力单价 → 重算并写回三个人力/风险/上限列）、`ramp_activities_update`（按活动名 + 列名改一个单元格）。

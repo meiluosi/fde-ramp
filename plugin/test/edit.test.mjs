@@ -50,3 +50,22 @@ test('updateActivities rejects unknown row/column', () => {
   assert.throws(() => updateActivities(activities, { activity: '无', column: '信心', value: 'x' }), /没有找到活动/)
   assert.throws(() => updateActivities(activities, { activity: '人工复核', column: '不存在', value: 'x' }), /没有找到列/)
 })
+
+import { diffLines, updateMetricsBatch } from '../lib/edit.js'
+
+test('updateMetricsBatch applies multiple rows', () => {
+  const result = updateMetricsBatch(metrics, [
+    { id: 'A01', minutes: 15 },
+    { activity: '复审', errorRate: 2 },
+  ])
+  assert.equal(result.results.length, 2)
+  assert.match(result.markdown, /3000\.00/)
+  assert.match(result.markdown, /2%/)
+})
+
+test('diffLines shows only changed region', () => {
+  const diff = diffLines('a\nb\nc\n', 'a\nB\nc\n')
+  assert.match(diff, /- b/)
+  assert.match(diff, /\+ B/)
+  assert.doesNotMatch(diff, /- a/)
+})

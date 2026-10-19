@@ -16,5 +16,7 @@ jobs:
         run: node --check plugin/lib/index.js
       - name: plugin unit tests
         run: node --test plugin/test/*.test.mjs
+      - name: dashboard smoke
+        run: python3 scripts/render_dashboard.py --root examples/web-novel-run --out /tmp/dashboard.html
       - name: self-test
         run: python3 scripts/selftest.py
