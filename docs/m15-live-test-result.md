@@ -97,3 +97,23 @@
 - 适配层在真实导出上可用：4 个导入器 + 组合器全部跑通；
 - 唯一阻塞是 `scout_export` 的 workspace 写权限，有 `/tmp` 绕行方案；
 - 下一步：把 `ramp-m15/` 的草稿合并进真实 `ramp/`，再跑 strict validator / readiness；并考虑给上游报 `scout_export` 的权限问题。
+
+
+## 5. 合并成完整 ramp（2026-10-19 追加）
+
+把 `ramp-m15/` 草稿并入网文行业包，生成完整工作区：
+
+```text
+/Users/meros/Documents/GitHub/m15-live/ramp-m15-full/
+```
+
+合并内容：网文包 8 域 / 25 活动 / 77 术语 / 14 玩家 / 10 关系；`chain-seed`、`timeline-import`、`company-card-阅文集团`、`scout-import`、`m15-composition-report`；来源合并为 **44 条**（行业包 34 + industry_map 5 + scout 5）。
+
+检查结果：
+
+```text
+validate_artifacts.py --strict -> OK
+readiness.py --check -> PASS（五维 3.0）
+```
+
+注意：`corrections.md` 仍是模拟访谈；阅文主体/岗位/财报口径仍待验证。完整 ramp 的 README 里写了同一套诚实声明。

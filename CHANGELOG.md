@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.8.3 · 2026-10-19
+
+- 把 M1.5 真实导出合并成完整 ramp（`m15-live/ramp-m15-full/`，仓库外）：网文包 + chain-seed + timeline + company card + scout 草稿；来源合并为 44 条。
+- 结果：`validate_artifacts.py --strict` OK；`readiness.py --check` PASS（五维 3.0 / 8 项证据门槛全过）。
+- 更新 `docs/m15-live-test-result.md`：新增合并步骤与完整 ramp 检查结果；完整 ramp 自带 README 写明模拟访谈/未核验边界。
+
 ## v0.8.2 · 2026-10-19
 
 - 完成 M1.5 真实导出实测：`industry_map`（9 节点/9 边）、`industry_track`（9 条）、`company_scan`（阅文集团）、`scout_export`（5 来源/5 主张）→ `m15_compose.py` 4/4 成功。
