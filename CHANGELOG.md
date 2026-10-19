@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.9.0 · 2026-10-19
+
+- M2 插件骨架：新增 `plugin/`（`dsh-fde-ramp` 0.1.0），注册只读 `ramp_status`；CI 增加 `node --check`。
+- M1.5 自动化：新增 `scripts/merge_imports.py`，把 `ramp-m15` 草稿合并进已有 ramp（复制草稿、来源重编号、追加 chain 标记段）。
+- 复核 `scout_export` 问题：确认是 `dsh-scout` 未向 `fs.writeText` 传 per-call sandbox policy，不是 DSH 核心 bug；/tmp 绕行；上游 issue 草稿写入 `docs/m15-scout-export-issue.md`（待确认后发）。
+- README/roadmap/adapters 同步；插件骨架语法检查通过，selftest 23 项仍通过。
+
 ## v0.8.3 · 2026-10-19
 
 - 把 M1.5 真实导出合并成完整 ramp（`m15-live/ramp-m15-full/`，仓库外）：网文包 + chain-seed + timeline + company card + scout 草稿；来源合并为 44 条。

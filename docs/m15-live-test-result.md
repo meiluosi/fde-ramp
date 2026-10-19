@@ -79,7 +79,7 @@
 - 写入 workspace 内任意目录都报：`file access denied under workspace-write mode`；
 - 写入 `/tmp` 成功；
 - 处理：先导出到 `/tmp`，再复制进 workspace。已在 `docs/m15-live-test.md` 和 `references/adapters.md` 记录。
-- 影响：真实环境用 scout 导出时，要么把 `targetDir` 指到 `/tmp`，要么等插件/宿主修复 workspace 写权限。
+- 影响：真实环境用 scout 导出时，要么把 `targetDir` 指到 `/tmp`，要么等插件/宿主修复 workspace 写权限。复核结论（是插件 bug，不是 DSH 核心）见 [`m15-scout-export-issue.md`](m15-scout-export-issue.md)。
 
 ### 3.2 `industry_track` 的 quick 模式条目信息不全
 

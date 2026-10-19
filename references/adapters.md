@@ -83,7 +83,7 @@ python3 scripts/import_scout_case.py \
 
 生成 `ramp/scout-import.md`：公司/岗位/决策、来源表（E0–E3）、主张表、访谈问题、合并建议。
 
-> **实测坑（DSH 0.2.1-rc.1 / workspace-write）**：`scout_export` 写 workspace 内任意目录都会报 `file access denied under workspace-write mode`；写 `/tmp` 可以。先导出到 `/tmp`，再复制进 workspace。详见 [`docs/m15-live-test-result.md`](../docs/m15-live-test-result.md)。
+> **实测坑（DSH 0.2.1-rc.2 / workspace-write）**：`scout_export` 写 workspace 内任意目录都会报 `file access denied under workspace-write mode`；写 `/tmp` 可以。先导出到 `/tmp`，再复制进 workspace。原因是插件没把 per-call sandbox policy 传给 `fs.writeText`；复核见 [`docs/m15-scout-export-issue.md`](../docs/m15-scout-export-issue.md)。
 
 ### 证据等级怎么映射
 

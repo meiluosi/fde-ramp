@@ -1,0 +1,46 @@
+{
+  "name": "dsh-fde-ramp",
+  "version": "0.1.0",
+  "description": "FDE 行业速成 skill 的 DSH 插件骨架：读取 ramp 工作区状态，后续扩展 chain/activities/metrics/opportunities 工具。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@deepseek-ai/schemastery": "~3.18.4"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=4.0.2 <5",
+    "@deepseek-ai/dsh-tools": ">=0.1.0-rc.6 <0.3.0-0"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    }
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meiluosi/fde-ramp.git"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "fde",
+    "industry-research"
+  ]
+}
