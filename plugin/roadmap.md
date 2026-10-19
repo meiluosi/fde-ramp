@@ -119,7 +119,7 @@ dsh-fde-ramp/
 | **M1 可复制（✅ 已完成，v0.4.0）** | 第二个行业包：网络文学 / 网文写作；「没有客户资料」的走法已写进 SKILL | 行业包 27 条来源、77 词、25 行活动；`examples/web-novel-run/` 通过 strict + readiness |
 | **M1.5 组合现有插件（✅ 组合器完成，待真实导出实测）** | `references/adapters.md` + 4 个导入器 + `m15_compose.py`；接 `dsh-industry-research` / `dsh-scout` / `dsh-kb` | 样例导出 4/4 导入成功；待真实环境安装三插件跑一次对比 |
 | **M2 工具化（✅ 读 + 写工具）** | 5 个只读工具 + `ramp_metrics_update` / `ramp_activities_update` 写工具；下一步 M3 面板 | 工具可独立跑；真实 headless 读写调用已通过 |
-| **M3 UI（🚧 静态面板已起）** | `scripts/render_dashboard.py` 生成 HTML：四数字表 + 成本卡片 + 机会象限 + 第一项目；下一步嵌进 DSH 侧栏/客户端 | Web 面板可用，状态与文件同步 |
+| **M3 UI（🚧 客户端面板已接入，待重启验证）** | 侧栏「算账面板」+ 全屏 overlay + `/fde-ramp/api/snapshot`；四数字表 + 成本卡片 + 机会象限 + 第一项目 | Web 面板可用，状态与文件同步 |
 | **M4 发布** | npm 包 + 市场索引 + 文档站 | 外部用户可一键安装并跑通 |
 
 ## 7. 验证与指标

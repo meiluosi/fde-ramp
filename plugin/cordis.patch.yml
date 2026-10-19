@@ -1,3 +1,5 @@
 - insert:
     - id: dsh-fde-ramp
       name: dsh-fde-ramp
+    - id: dsh-fde-ramp-panel
+      name: dsh-fde-ramp/panel

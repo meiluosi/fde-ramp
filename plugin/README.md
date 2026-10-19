@@ -1,6 +1,6 @@
 # dsh-fde-ramp（M2 骨架）
 
-这是 `fde-ramp` 的 DSH 插件起点。当前注册 **5 个只读工具 + 2 个写工具**。
+这是 `fde-ramp` 的 DSH 插件起点。当前注册 **9 个工具**（5 个只读 + 2 个单条写 + 2 个批量写），另有 Web 端侧栏面板。
 
 - `ramp_status({ root? })`：读取 ramp 的 `state.json`、`sources.jsonl`，返回是否初始化、来源数、活动行数、五维自评；
 - `ramp_chain({ root? })`：统计 `chain.md` 的玩家表/关系表行数；
@@ -11,6 +11,8 @@
 - `ramp_activities_update({ root?, activity, column, value })`：按活动名和列名改一个单元格；
 - `ramp_metrics_batch({ root?, updates[], dryRun? })`：批量改数字，自动重算；写前备份、支持 diff 预览；
 - `ramp_activities_batch({ root?, updates[], dryRun? })`：批量改单元格，写前备份、支持 diff 预览。
+
+侧栏「算账面板」：点击后打开全屏面板，输入 ramp 路径，显示四数字表、成本卡片、机会象限和第一项目。数据走 Host 路由 `/fde-ramp/api/snapshot`。
 
 ## 还没做
 
@@ -31,7 +33,7 @@ node --check plugin/lib/index.js
 node --test plugin/test/parse.test.mjs
 ```
 
-当前 13 项单测（解析 6 + 编辑 7）全过；真实 DSH profile 调用记录见 [`../docs/m15-plugin-live-test.md`](../docs/m15-plugin-live-test.md)。
+当前 13 项单测（解析 6 + 编辑 7）全过；客户端 bundle 由 `npm run build:client` 生成；真实 DSH profile 调用记录见 [`../docs/m15-plugin-live-test.md`](../docs/m15-plugin-live-test.md)。
 
 装进 DSH profile：
 

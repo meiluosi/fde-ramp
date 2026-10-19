@@ -1,16 +1,19 @@
 {
   "name": "dsh-fde-ramp",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "FDE 行业速成 skill 的 DSH 插件骨架：读取 ramp 工作区状态，后续扩展 chain/activities/metrics/opportunities 工具。",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
     "./cordis.patch.yml": "./cordis.patch.yml",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./client": "./client/bundle.js",
+    "./panel": "./lib/panel.js"
   },
   "files": [
     "lib",
+    "client",
     "cordis.patch.yml",
     "README.md"
   ],
@@ -31,6 +34,9 @@
     "manifestVersion": 1,
     "bundle": {
       "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
     }
   },
   "repository": {
@@ -42,5 +48,8 @@
     "dsh-plugin",
     "fde",
     "industry-research"
-  ]
+  ],
+  "scripts": {
+    "build:client": "node scripts/build-client.mjs"
+  }
 }

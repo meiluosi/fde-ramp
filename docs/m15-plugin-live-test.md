@@ -161,3 +161,27 @@ ramp_opportunities /tmp/m15-plugin-test
 ```
 
 备份在 `/tmp/desktop-profile-backup-20261019-233156/`。
+
+
+## 7. M3 客户端面板（2026-10-20）
+
+新增：
+
+- `plugin/client/index.js` + `client/bundle.js`：侧栏「算账面板」按钮 → 全屏 overlay；
+- `plugin/lib/panel.js`：独立 Host 插件（`inject: ['webServer']`），注册 `/fde-ramp/api/snapshot`；
+- 面板显示四数字表、成本卡片、机会象限、第一项目。
+
+验证：
+
+- `node plugin/scripts/build-client.mjs` 构建通过；
+- 在 scratch web profile（`/tmp/dsh-m15-home/profiles/webtest`，端口 64112）确认没有 token 的请求被 connection fence 拦住（400），路由存在；浏览器同源请求才可读；
+- 已把最新插件复制到 `~/.dsh/profiles/desktop/node_modules/dsh-fde-ramp/`；
+- **需要重启 DSH 才会加载客户端 bundle 和侧栏入口**（当前会话不会热加载 client）。
+
+面板默认 root 输入 `ramp`；本次示例可填：
+
+```text
+m15-live/ramp-m15-full-auto
+```
+
+Host 默认工作区是 `~/Documents/GitHub`。

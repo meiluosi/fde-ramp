@@ -4,6 +4,14 @@
 
 - 文档：README 增加 FDE Skill 系列导航与跨 Skill 编号约定；无代码改动。
 
+## v0.9.5 · 2026-10-20
+
+- M3 客户端面板：`plugin/client/index.js` + `client/bundle.js`，侧栏「算账面板」→ 全屏 overlay；显示四数字表、成本卡片、机会象限、第一项目。
+- Host 侧新增 `plugin/lib/panel.js`（`webServer` 插件，`/fde-ramp/api/snapshot`）；与工具插件拆开，headless profile 仍可加载工具。
+- Host 快照 API 加 root 白名单（默认 `~/Documents/GitHub`）；客户端输入相对路径。
+- 已更新 desktop profile 安装副本；**需重启 DSH 才会加载客户端侧栏**（当前会话不会热加载 client bundle）。
+- Node 单测 13 项；CI 增加 client build 检查。
+
 ## v0.9.4 · 2026-10-19
 
 - 写工具增强：`ramp_metrics_batch` / `ramp_activities_batch`（批量更新、写前备份 `.bak`、dryRun diff 预览）。

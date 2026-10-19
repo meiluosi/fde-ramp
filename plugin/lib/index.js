@@ -9,7 +9,8 @@
  * loaded by a DSH profile after `dsh plugin add`.
  */
 import { readFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
+import { homedir } from 'node:os'
+import { resolve, sep } from 'node:path'
 import { defineTool } from '@deepseek-ai/dsh-tools'
 import z from '@deepseek-ai/schemastery'
 import { activityStats, chainStats, metricsStats, opportunityStats } from './parse.js'
@@ -19,8 +20,10 @@ export const name = 'dsh-fde-ramp'
 export const inject = ['tools']
 
 export const Config = z.object({
-  /** Default ramp root relative to the session workspace. */
+  /** Default ramp root relative to the workspace root. */
   root: z.string().default('ramp'),
+  /** Workspace root used by the dashboard API; defaults to ~/Documents/GitHub. */
+  workspaceRoot: z.string().default(''),
 })
 
 function sessionCwd(exec) {
@@ -80,7 +83,8 @@ function readinessLabel(state) {
 }
 
 export function apply(ctx, config = {}) {
-  const settings = { root: 'ramp', ...config }
+  const settings = { root: 'ramp', workspaceRoot: '', ...config }
+  const workspaceRoot = resolve(settings.workspaceRoot || process.env.FDE_RAMP_WORKSPACE || resolve(homedir(), 'Documents', 'GitHub'))
 
   ctx.effect(function* registerRampTools() {
     yield ctx.tools.register(defineTool({
@@ -553,4 +557,5 @@ export function apply(ctx, config = {}) {
       },
     }))
   })
+
 }

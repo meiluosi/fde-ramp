@@ -119,7 +119,7 @@ fde-ramp/
     m15-live-test.md           # M1.5 真实导出实测步骤（装插件 → 导出 → compose）
     m15-live-test-result.md    # 2026-10-19 实测结果、路径与踩坑
     m15-scout-export-issue.md  # scout_export workspace-write 问题复核
-    m15-plugin-live-test.md    # 插件本地 headless 实测（ramp_status/metrics/opportunities）
+    m15-plugin-live-test.md    # 插件本地 headless 实测（ramp_status/metrics/opportunities）+ M3 面板
   plugin/
     package.json               # dsh-fde-ramp npm 包骨架
     cordis.patch.yml
@@ -185,7 +185,7 @@ fde-ramp/
 
 ## 当前状态
 
-- ✅ **v0.9.4（当前）**：写工具增强（批量 + 写前备份 + diff 预览）+ M3 静态面板 `dashboard.html`；13 项单测；插件已装入主力 desktop profile，当前会话真实调用通过。
+- ✅ **v0.9.5（当前）**：M3 侧栏面板（客户端 bundle + Host snapshot API）已接入 desktop profile；13 项单测；写工具批量/备份/diff 可用。
 - ⏭ **下一步**：在真实环境安装三个插件，用 `m15_compose.py` 跑一次真实导出；然后把方案模式补进示例；最后插件化（M2/M3），见 `plugin/roadmap.md`。
 
 ## 已知限制
