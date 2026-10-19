@@ -129,7 +129,7 @@ python3 scripts/render_dashboard.py --root /tmp/m15-plugin-test
 dsh plugin --profile desktop add /Users/meros/Documents/GitHub/fde-ramp/plugin
 ```
 
-装完重启 DSH，`ramp_status` / `ramp_chain` / `ramp_activities` / `ramp_metrics` / `ramp_opportunities` 就会出现。
+装完重启 DSH，`ramp_status` / `ramp_chain` / `ramp_activities` / `ramp_metrics` / `ramp_opportunities` / `ramp_metrics_update` / `ramp_activities_update` / `ramp_metrics_batch` / `ramp_activities_batch` 就会出现。
 
 
 ## 6. 装进主力 desktop profile（2026-10-20）
@@ -145,7 +145,7 @@ error: profile "desktop" is managed exclusively by the Electron application
 - 复制 `plugin/` 到 `~/.dsh/profiles/desktop/node_modules/dsh-fde-ramp/`；
 - `package.json` dependencies 加 `"dsh-fde-ramp": "file:/Users/meros/Documents/GitHub/fde-ramp/plugin"`；
 - `dsh.profile.bundles` 追加 `"dsh-fde-ramp"`；
-- 当前 DSH 会话已出现 7 个 `ramp_*` 工具。
+- 当前 DSH 会话已出现 9 个 `ramp_*` 工具（5 个只读 + 2 个单条写 + 2 个批量写）。
 
 当前会话真实调用：
 
