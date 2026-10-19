@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased · 2026-10-20
+
+- 文档：README 增加 FDE Skill 系列导航与跨 Skill 编号约定；无代码改动。
+
 ## v0.9.3 · 2026-10-19
 
 - M2 写工具：`ramp_metrics_update`（四个数字/人力单价 → 重算并写回三个人力/风险/上限列）、`ramp_activities_update`（按活动名 + 列名改一个单元格）。

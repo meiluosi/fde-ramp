@@ -168,6 +168,20 @@ fde-ramp/
 
 两个都是从 `init_ramp.py` 生成、走完四步、通过 `validate_artifacts.py --strict` 和 `readiness.py --check` 的完整 `ramp/` 示例。都含 5 处**模拟访谈**修正（已标注是虚构示例，只演示记录格式）。
 
+## FDE Skill 系列
+
+各 Skill 独立运行，通过手动读取的产物衔接，不互相依赖安装。典型顺序：ramp → problem-framing → demo → pilot，comms 贯穿各阶段。
+
+| Skill | 管什么 | 结论词 |
+|---|---|---|
+| [fde-ramp](https://github.com/meiluosi/fde-ramp) | 见客户前搭起行业基本盘，拿图去被一线改 | 自检分数 |
+| [fde-problem-framing](https://github.com/meiluosi/fde-problem-framing) | 把需求变成有证据的业务问题，比较 AI 与非 AI | Proceed / Investigate / Non-AI / Stop-Defer |
+| [fde-comms](https://github.com/meiluosi/fde-comms) | 与人的关键沟通：访谈、向上汇报、坏消息 | 无（产出文稿） |
+| [fde-demo](https://github.com/meiluosi/fde-demo) | 设计并复盘一次客户 Demo，换验证与信任 | Proceed / Iterate / Pivot / Stop-Defer |
+| [fde-pilot](https://github.com/meiluosi/fde-pilot) | 把 Demo 通过的方案做成可检验的试点并判定成效 | Proceed / Iterate / Pivot / Stop-Defer |
+
+跨 Skill 引用时加前缀保留原编号（`ramp:S01`、`framing:V2`、`demo:L3`、`pilot:M2`）；同名结论词含义随阶段不同，引用时写 `framing:Proceed`、`demo:Proceed`。编号、结论词、边界与回写规则的完整约定见 fde-demo 仓库的 `references/series.md`（私有仓库，链接需登录）。
+
 ## 当前状态
 
 - ✅ **v0.9.3（当前）**：M2 读写工具完成——5 个只读 + `ramp_metrics_update` / `ramp_activities_update`；11 项单测；本地 headless 真实读写调用通过；`scout_export` 问题已发上游 #1。
