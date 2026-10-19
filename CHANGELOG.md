@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.3 · 2026-10-19
+
+- M2 写工具：`ramp_metrics_update`（四个数字/人力单价 → 重算并写回三个人力/风险/上限列）、`ramp_activities_update`（按活动名 + 列名改一个单元格）。
+- `plugin/lib/edit.js` + 5 项编辑单测；总单测 11 项。
+- 真实 headless DSH profile 调用验证：A01 改为 15 分钟后写回 `3000.00 / 300.00 / 3300.00`；活动「人工复核」信心由 ❓ 改 ✅。
+- `plugin` 版本 0.2.0；CI 改为跑全部 `plugin/test/*.test.mjs`。
+- 未做 M3 面板；写工具是单行/单格更新，不自动备份。
+
 ## v0.9.2 · 2026-10-19
 
 - M2 只读工具补齐：`ramp_metrics`（四个数字 → 人力/风险成本/改进上限/年化）与 `ramp_opportunities`（六信号/四维/红灯/第一项目）。

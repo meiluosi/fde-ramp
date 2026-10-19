@@ -64,12 +64,36 @@ first project: O1
 2700 × 250 = 675,000 / 年
 ```
 
+## 3.5 真实写工具调用
+
+用同一个 fixture 调 `ramp_metrics_update`（A01，minutes=15）：
+
+```text
+updated A01 (line 5)
+labor/day: 3000  risk/day: 300  ceiling/day: 3300
+已重算并写回三个成本列。
+```
+
+写回后的行：
+
+```text
+| A01 | 审核 | 初审 | 运营 | 15 | 200 | 3% | 50 | 60 | 3000.00 | 300.00 | 3300.00 | 观察 | ⚠️ |
+```
+
+`ramp_activities_update`（人工复核 / 信心 / ✅）也实际写回了 `activities.md`：
+
+```text
+updated 人工复核 / 信心
+❓ -> ✅
+```
+
 ## 4. 没做什么
 
 - **没有改主力 `desktop` profile**；隔离 profile 在 `/tmp`，不持久；
 - 没有把 API key 写进仓库；
 - 没有发布 npm 包；
-- 写工具（`ramp_metrics` 写入四数字、`ramp_activities` 编辑）还没做，当前 5 个工具都是只读。
+- 写工具只支持单行/单格更新，不做批量导入；写之前不会自动备份（git 工作区建议先提交）；
+- M3 面板还没做。
 
 ## 5. 如果要装进主力 profile
 

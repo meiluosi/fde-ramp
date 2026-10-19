@@ -1,12 +1,14 @@
 # dsh-fde-ramp（M2 骨架）
 
-这是 `fde-ramp` 的 DSH 插件起点。当前注册三个只读工具：
+这是 `fde-ramp` 的 DSH 插件起点。当前注册 **5 个只读工具 + 2 个写工具**。
 
 - `ramp_status({ root? })`：读取 ramp 的 `state.json`、`sources.jsonl`，返回是否初始化、来源数、活动行数、五维自评；
 - `ramp_chain({ root? })`：统计 `chain.md` 的玩家表/关系表行数；
 - `ramp_activities({ root? })`：统计 `activities.md` 的活动行数、列数、含 ❓ 的行数；
 - `ramp_metrics({ root?, days? })`：读 `process-metrics.md`，算每天人力/风险成本、改进上限、年化；
-- `ramp_opportunities({ root? })`：读 `opportunities.md`，数信号/四维/红灯，按「第一象限最靠右」给第一项目。
+- `ramp_opportunities({ root? })`：读 `opportunities.md`，数信号/四维/红灯，按「第一象限最靠右」给第一项目；
+- `ramp_metrics_update({ root?, id?/activity?, minutes?, frequency?, errorRate?, costPerError?, hourlyRate?, who? })`：写回四个数字/人力单价，并重算三个成本列；
+- `ramp_activities_update({ root?, activity, column, value })`：按活动名和列名改一个单元格。
 
 ## 还没做
 
@@ -27,7 +29,7 @@ node --check plugin/lib/index.js
 node --test plugin/test/parse.test.mjs
 ```
 
-当前 6 项解析器单测全过；真实 DSH profile 调用记录见 [`../docs/m15-plugin-live-test.md`](../docs/m15-plugin-live-test.md)。
+当前 11 项单测（解析 6 + 编辑 5）全过；真实 DSH profile 调用记录见 [`../docs/m15-plugin-live-test.md`](../docs/m15-plugin-live-test.md)。
 
 装进 DSH profile（CLI）：
 

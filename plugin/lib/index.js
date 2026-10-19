@@ -13,6 +13,7 @@ import { resolve } from 'node:path'
 import { defineTool } from '@deepseek-ai/dsh-tools'
 import z from '@deepseek-ai/schemastery'
 import { activityStats, chainStats, metricsStats, opportunityStats } from './parse.js'
+import { updateActivities, updateMetrics } from './edit.js'
 
 export const name = 'dsh-fde-ramp'
 export const inject = ['tools']
@@ -49,6 +50,17 @@ async function countLines(path) {
   } catch {
     return 0
   }
+}
+
+async function writeWithPolicy(ctx, exec, filePath, content) {
+  const fs = ctx.get('fs')
+  if (!fs || typeof fs.resolve !== 'function' || typeof fs.writeText !== 'function') {
+    throw new Error('当前 profile 没有可写的 fs 服务')
+  }
+  const cwd = sessionCwd(exec)
+  const target = await fs.resolve(filePath, { cwd, signal: exec.signal })
+  const policy = ctx.get('sandboxPolicy')?.resolve({ session: exec.agent?.session })
+  await fs.writeText(target, content, undefined, exec.signal, policy)
 }
 
 function readinessLabel(state) {
@@ -289,6 +301,113 @@ export function apply(ctx, config = {}) {
         const stats = opportunityStats(text)
         const { items, ...rest } = stats
         return { root, initialized: true, ...rest }
+      },
+    }))
+
+    yield ctx.tools.register(defineTool({
+      name: 'ramp_metrics_update',
+      description: '更新 process-metrics.md 中一个环节的四个数字（耗时/日频次/出错率/单次代价）+ 人力单价，并重算每天人力成本、风险成本、改进上限。会写入文件。',
+      parameters: {
+        root: { type: 'string', description: 'ramp 工作区路径；默认取配置 root' },
+        id: { type: 'string', description: '环节ID，如 A01；与 activity 二选一' },
+        activity: { type: 'string', description: '活动名（包含匹配）；与 id 二选一' },
+        minutes: { type: 'number', description: '耗时（分钟/次）' },
+        frequency: { type: 'number', description: '日频次（次/天）' },
+        errorRate: { type: 'number', description: '出错率（百分数，如 3 表示 3%）' },
+        costPerError: { type: 'number', description: '单次代价（元/次）' },
+        hourlyRate: { type: 'number', description: '人力单价（元/小时）' },
+        who: { type: 'string', description: '谁做/职级（可选）' },
+      },
+      output: {
+        schema: {
+          type: 'object',
+          properties: {
+            root: { type: 'string', required: true },
+            id: { type: 'string', required: true },
+            activity: { type: 'string', required: true },
+            line: { type: 'number', required: true },
+            laborPerDay: { type: 'number', required: true },
+            riskPerDay: { type: 'number', required: true },
+            ceilingPerDay: { type: 'number', required: true },
+            note: { type: 'string', required: true },
+          },
+          additionalProperties: false,
+        },
+        render: (_args, value) => [{
+          type: 'text',
+          text: `updated ${value.id || value.activity} (line ${value.line})\n`
+            + `labor/day: ${value.laborPerDay}  risk/day: ${value.riskPerDay}  ceiling/day: ${value.ceilingPerDay}\n${value.note}`,
+        }],
+      },
+      async execute(args, exec) {
+        const cwd = sessionCwd(exec)
+        const root = resolve(cwd, args.root || settings.root)
+        const path = resolve(root, 'process-metrics.md')
+        const text = await readText(path)
+        if (text === undefined) throw new Error(`没有 process-metrics.md: ${path}`)
+        if (args.minutes === undefined && args.frequency === undefined && args.errorRate === undefined
+          && args.costPerError === undefined && args.hourlyRate === undefined && args.who === undefined) {
+          throw new Error('至少提供一个要更新的字段')
+        }
+        const result = updateMetrics(text, args)
+        await writeWithPolicy(ctx, exec, path, result.markdown)
+        const computed = result.computed
+        return {
+          root,
+          id: result.id,
+          activity: result.activity,
+          line: result.line,
+          laborPerDay: computed ? Math.round(computed.labor * 100) / 100 : 0,
+          riskPerDay: computed ? Math.round(computed.risk * 100) / 100 : 0,
+          ceilingPerDay: computed ? Math.round(computed.ceiling * 100) / 100 : 0,
+          note: computed ? '已重算并写回三个成本列。' : '四个数字不全，已写回输入，但未重算成本。',
+        }
+      },
+    }))
+
+    yield ctx.tools.register(defineTool({
+      name: 'ramp_activities_update',
+      description: '编辑 activities.md 中某一行活动表的一个单元格（按活动名匹配行、按列名包含匹配列），并写入文件。',
+      parameters: {
+        root: { type: 'string', description: 'ramp 工作区路径；默认取配置 root' },
+        activity: { type: 'string', required: true, description: '活动名（包含匹配）' },
+        column: { type: 'string', required: true, description: '列名（包含匹配），如「做什么」「谁做」「信心」' },
+        value: { type: 'string', required: true, description: '新值' },
+      },
+      output: {
+        schema: {
+          type: 'object',
+          properties: {
+            root: { type: 'string', required: true },
+            activity: { type: 'string', required: true },
+            column: { type: 'string', required: true },
+            oldValue: { type: 'string', required: true },
+            newValue: { type: 'string', required: true },
+            note: { type: 'string', required: true },
+          },
+          additionalProperties: false,
+        },
+        render: (_args, value) => [{
+          type: 'text',
+          text: `updated ${value.activity} / ${value.column}\n${value.oldValue || '(空)'} -> ${value.newValue}`,
+        }],
+      },
+      async execute(args, exec) {
+        const cwd = sessionCwd(exec)
+        const root = resolve(cwd, args.root || settings.root)
+        const path = resolve(root, 'activities.md')
+        const text = await readText(path)
+        if (text === undefined) throw new Error(`没有 activities.md: ${path}`)
+        const result = updateActivities(text, args)
+        await writeWithPolicy(ctx, exec, path, result.markdown)
+        return {
+          root,
+          activity: result.activity,
+          column: result.column,
+          oldValue: result.oldValue,
+          newValue: result.newValue,
+          note: '已写入 activities.md（只改一个单元格）。',
+        }
       },
     }))
   })

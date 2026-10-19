@@ -170,7 +170,7 @@ fde-ramp/
 
 ## 当前状态
 
-- ✅ **v0.9.2（当前）**：M2 五个只读工具（status/chain/activities/metrics/opportunities）+ 6 项单测；本地 headless DSH profile 真实调用通过；`scout_export` 问题已发上游 #1。
+- ✅ **v0.9.3（当前）**：M2 读写工具完成——5 个只读 + `ramp_metrics_update` / `ramp_activities_update`；11 项单测；本地 headless 真实读写调用通过；`scout_export` 问题已发上游 #1。
 - ⏭ **下一步**：在真实环境安装三个插件，用 `m15_compose.py` 跑一次真实导出；然后把方案模式补进示例；最后插件化（M2/M3），见 `plugin/roadmap.md`。
 
 ## 已知限制
