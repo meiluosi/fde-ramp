@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.2 · 2026-10-19
+
+- M2 只读工具补齐：`ramp_metrics`（四个数字 → 人力/风险成本/改进上限/年化）与 `ramp_opportunities`（六信号/四维/红灯/第一项目）。
+- `plugin/lib/parse.js` 增加 metrics/opportunity 纯函数，`node --test` 增至 6 项。
+- 本地 headless DSH profile（`/tmp/dsh-m15-home/profiles/m15h`）真实调用通过：`ramp_status` 返回 44 来源/25 活动/readiness 3.0；`ramp_metrics` 算例 2400+300=2700/天；`ramp_opportunities` 选出 O1。
+- 新增 `docs/m15-plugin-live-test.md`；plugin README/roadmap 同步。
+- 没有改主力 `desktop` profile，没有发布 npm 包。
+
 ## v0.9.1 · 2026-10-19
 
 - M2：新增只读 `ramp_chain` / `ramp_activities` 工具与纯函数解析器 `plugin/lib/parse.js`，加 `node --test` 单测（4 项）。

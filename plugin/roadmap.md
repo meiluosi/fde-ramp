@@ -118,7 +118,7 @@ dsh-fde-ramp/
 | **M0.5 真实试跑（用户判断可跳过）** | 原计划用真实客户走一遍；用户判断当前版本已可用，跳过 | —（保留为以后可选） |
 | **M1 可复制（✅ 已完成，v0.4.0）** | 第二个行业包：网络文学 / 网文写作；「没有客户资料」的走法已写进 SKILL | 行业包 27 条来源、77 词、25 行活动；`examples/web-novel-run/` 通过 strict + readiness |
 | **M1.5 组合现有插件（✅ 组合器完成，待真实导出实测）** | `references/adapters.md` + 4 个导入器 + `m15_compose.py`；接 `dsh-industry-research` / `dsh-scout` / `dsh-kb` | 样例导出 4/4 导入成功；待真实环境安装三插件跑一次对比 |
-| **M2 工具化（🚧 只读工具已起）** | `plugin/` 包 + `ramp_status` / `ramp_chain` / `ramp_activities` 只读工具；下一步写工具 `ramp_metrics` / `ramp_opportunities` | 工具可独立跑，skill 调用工具 |
+| **M2 工具化（✅ 只读工具 5 个）** | `ramp_status` / `ramp_chain` / `ramp_activities` / `ramp_metrics` / `ramp_opportunities`；下一步写工具与面板 | 工具可独立跑；真实 headless 调用已通过 |
 | **M3 UI** | 就绪度面板、术语卡、链路/关系图、活动表、待验证看板、演练室 | Web 面板可用，状态与文件同步 |
 | **M4 发布** | npm 包 + 市场索引 + 文档站 | 外部用户可一键安装并跑通 |
 

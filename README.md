@@ -118,6 +118,7 @@ fde-ramp/
     m15-live-test.md           # M1.5 真实导出实测步骤（装插件 → 导出 → compose）
     m15-live-test-result.md    # 2026-10-19 实测结果、路径与踩坑
     m15-scout-export-issue.md  # scout_export workspace-write 问题复核
+    m15-plugin-live-test.md    # 插件本地 headless 实测（ramp_status/metrics/opportunities）
   plugin/
     package.json               # dsh-fde-ramp npm 包骨架
     cordis.patch.yml
@@ -169,7 +170,7 @@ fde-ramp/
 
 ## 当前状态
 
-- ✅ **v0.9.1（当前）**：M2 三个只读工具（`ramp_status` / `ramp_chain` / `ramp_activities`）+ 插件单测；`merge_imports.py` 自动合并（含 scout 来源）通过 strict/readiness；`scout_export` 问题已发上游 #1。
+- ✅ **v0.9.2（当前）**：M2 五个只读工具（status/chain/activities/metrics/opportunities）+ 6 项单测；本地 headless DSH profile 真实调用通过；`scout_export` 问题已发上游 #1。
 - ⏭ **下一步**：在真实环境安装三个插件，用 `m15_compose.py` 跑一次真实导出；然后把方案模式补进示例；最后插件化（M2/M3），见 `plugin/roadmap.md`。
 
 ## 已知限制

@@ -12,7 +12,7 @@ import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { defineTool } from '@deepseek-ai/dsh-tools'
 import z from '@deepseek-ai/schemastery'
-import { activityStats, chainStats } from './parse.js'
+import { activityStats, chainStats, metricsStats, opportunityStats } from './parse.js'
 
 export const name = 'dsh-fde-ramp'
 export const inject = ['tools']
@@ -202,6 +202,93 @@ export function apply(ctx, config = {}) {
           uncertain: stats.uncertain,
           note: '口径：表头含「业务域+流程+环节」的首张表；uncertain = 任一单元格含 ❓ 的行。',
         }
+      },
+    }))
+
+    yield ctx.tools.register(defineTool({
+      name: 'ramp_metrics',
+      description: '读取 ramp/process-metrics.md，按四个数字（耗时/日频次/出错率/单次代价）+ 人力单价计算每天人力成本、风险成本、改进上限。只读，不修改文件。',
+      parameters: {
+        root: { type: 'string', description: 'ramp 工作区路径；默认取配置 root' },
+        days: { type: 'number', description: '年化工作日，默认 250' },
+      },
+      output: {
+        schema: {
+          type: 'object',
+          properties: {
+            root: { type: 'string', required: true },
+            initialized: { type: 'boolean', required: true },
+            rows: { type: 'number', required: true },
+            computed: { type: 'number', required: true },
+            incomplete: { type: 'number', required: true },
+            laborPerDay: { type: 'number', required: true },
+            riskPerDay: { type: 'number', required: true },
+            ceilingPerDay: { type: 'number', required: true },
+            ceilingPerYear: { type: 'number', required: true },
+            note: { type: 'string', required: true },
+          },
+          additionalProperties: false,
+        },
+        render: (_args, value) => [{
+          type: 'text',
+          text: value.initialized
+            ? `metrics: ${value.root}\nrows: ${value.rows}  computed: ${value.computed}  incomplete: ${value.incomplete}\n`
+              + `labor/day: ${value.laborPerDay}  risk/day: ${value.riskPerDay}\n`
+              + `ceiling/day: ${value.ceilingPerDay}  ceiling/year: ${value.ceilingPerYear}\n${value.note}`
+            : `process-metrics.md 不存在: ${value.root}`,
+        }],
+      },
+      async execute(args, exec) {
+        const cwd = sessionCwd(exec)
+        const root = resolve(cwd, args.root || settings.root)
+        const text = await readText(resolve(root, 'process-metrics.md'))
+        if (text === undefined) {
+          return { root, initialized: false, rows: 0, computed: 0, incomplete: 0, laborPerDay: 0, riskPerDay: 0, ceilingPerDay: 0, ceilingPerYear: 0, note: '没有 process-metrics.md；先按模板填四个数字。' }
+        }
+        const days = Number.isFinite(args.days) && args.days > 0 ? args.days : 250
+        const stats = metricsStats(text, days)
+        const { top, ...rest } = stats
+        return { root, initialized: true, ...rest, note: stats.incomplete > 0 ? `有 ${stats.incomplete} 行数字不全，未计入合计；补齐后再算。` : '全部行已计算。' }
+      },
+    }))
+
+    yield ctx.tools.register(defineTool({
+      name: 'ramp_opportunities',
+      description: '读取 ramp/opportunities.md，读六个信号命中数、四维打分、红灯，并按「第一象限最靠右」给出第一项目建议。只读，不修改文件。',
+      parameters: {
+        root: { type: 'string', description: 'ramp 工作区路径；默认取配置 root' },
+      },
+      output: {
+        schema: {
+          type: 'object',
+          properties: {
+            root: { type: 'string', required: true },
+            initialized: { type: 'boolean', required: true },
+            count: { type: 'number', required: true },
+            scored: { type: 'number', required: true },
+            red: { type: 'number', required: true },
+            firstProject: { type: 'string', required: true },
+            note: { type: 'string', required: true },
+          },
+          additionalProperties: false,
+        },
+        render: (_args, value) => [{
+          type: 'text',
+          text: value.initialized
+            ? `opportunities: ${value.root}\ncount: ${value.count}  scored: ${value.scored}  red: ${value.red}\nfirst project: ${value.firstProject || '(无)'}\n${value.note}`
+            : `opportunities.md 不存在: ${value.root}`,
+        }],
+      },
+      async execute(args, exec) {
+        const cwd = sessionCwd(exec)
+        const root = resolve(cwd, args.root || settings.root)
+        const text = await readText(resolve(root, 'opportunities.md'))
+        if (text === undefined) {
+          return { root, initialized: false, count: 0, scored: 0, red: 0, firstProject: '', note: '没有 opportunities.md；先按模板填机会与四维打分。' }
+        }
+        const stats = opportunityStats(text)
+        const { items, ...rest } = stats
+        return { root, initialized: true, ...rest }
       },
     }))
   })
