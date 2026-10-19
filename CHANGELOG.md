@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.9.1 · 2026-10-19
+
+- M2：新增只读 `ramp_chain` / `ramp_activities` 工具与纯函数解析器 `plugin/lib/parse.js`，加 `node --test` 单测（4 项）。
+- `m15_compose.py` 新增 `sources-scout.jsonl`；`merge_imports.py` 同时合并 industry-research 与 scout 来源，自动重编号。
+- 自动合并完整 ramp（`ramp-m15-full-auto`）：44 来源、strict OK、readiness PASS，与手工合并结果对比见 `docs/m15-live-test-result.md`。
+- `scout_export` 问题已发上游：https://github.com/MaxHou-infinity/dsh-scout/issues/1。
+
 ## v0.9.0 · 2026-10-19
 
 - M2 插件骨架：新增 `plugin/`（`dsh-fde-ramp` 0.1.0），注册只读 `ramp_status`；CI 增加 `node --check`。

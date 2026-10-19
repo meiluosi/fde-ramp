@@ -105,7 +105,7 @@ await fs.writeText(target, content, undefined, signal, policy);
 - 仓库：https://github.com/MaxHou-infinity/dsh-scout
 - 标题：`scout_export` fails under DSH `workspace-write` (fs-sandbox) when target is inside the session workspace
 - 正文要点：环境版本、复现步骤、错误文本、代码行、根因、`/tmp` 绕行、建议修复。
-- 是否发到上游：**待确认**（这是对外的公开 issue，先由你拍板）。
+- 已发到上游：https://github.com/MaxHou-infinity/dsh-scout/issues/1（2026-10-19，标题/repro/根因/建议修复齐全）。
 
 ## 7. 复核结论
 

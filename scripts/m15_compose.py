@@ -18,6 +18,7 @@ It never overwrites chain.md, sources.jsonl, players.md, etc.
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -74,10 +75,39 @@ def main() -> int:
 
     # 2) scout cases
     scout_dirs = sorted((imports / "scout").glob("*/case.json")) if (imports / "scout").is_dir() else []
+    scout_source_rows: list[dict] = []
+    tier_map = {"E3": "A", "E2": "B", "E1": "C", "E0": "D"}
     for case in scout_dirs:
         code, log = run_script("import_scout_case.py", "--case", str(case), "--out-dir", str(out_dir))
         results.append((f"scout: {case.parent.name}", code, log))
         outputs.append(str(out_dir / "scout-import.md"))
+        try:
+            data = json.loads(case.read_text(encoding="utf-8"))
+            srcs = data.get("sources") or []
+            separate = case.parent / "sources.json"
+            if not srcs and separate.exists():
+                decoded = json.loads(separate.read_text(encoding="utf-8"))
+                srcs = decoded.get("sources") if isinstance(decoded, dict) else decoded
+            for s in srcs or []:
+                scout_source_rows.append({
+                    "id": s.get("sourceId", ""),
+                    "title": s.get("title") or s.get("url", ""),
+                    "url": s.get("url") or "",
+                    "publisher": "",
+                    "published": "unknown",
+                    "accessed": (s.get("capturedAt") or "")[:10] or "unknown",
+                    "tier": tier_map.get(s.get("evidenceLevel"), "C"),
+                    "sourceKind": "media",
+                    "usedFor": ["brief", "verification"],
+                    "note": f"dsh-scout {s.get('sourceId')} / {s.get('evidenceLevel')} / {s.get('type')}",
+                })
+        except Exception:
+            pass
+    if scout_source_rows:
+        (out_dir / "sources-scout.jsonl").write_text(
+            "\n".join(json.dumps(r, ensure_ascii=False) for r in scout_source_rows) + "\n", encoding="utf-8"
+        )
+        outputs.append(str(out_dir / "sources-scout.jsonl"))
 
     if not results:
         print(f"ERROR: no plugin exports found under {imports}", file=sys.stderr)

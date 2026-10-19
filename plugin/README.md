@@ -1,8 +1,10 @@
 # dsh-fde-ramp（M2 骨架）
 
-这是 `fde-ramp` 的 DSH 插件起点。当前只注册一个只读工具：
+这是 `fde-ramp` 的 DSH 插件起点。当前注册三个只读工具：
 
-- `ramp_status({ root? })`：读取 ramp 的 `state.json`、`sources.jsonl`，返回是否初始化、来源数、活动行数、五维自评。
+- `ramp_status({ root? })`：读取 ramp 的 `state.json`、`sources.jsonl`，返回是否初始化、来源数、活动行数、五维自评；
+- `ramp_chain({ root? })`：统计 `chain.md` 的玩家表/关系表行数；
+- `ramp_activities({ root? })`：统计 `activities.md` 的活动行数、列数、含 ❓ 的行数。
 
 ## 还没做
 
@@ -20,6 +22,7 @@
 
 ```bash
 node --check plugin/lib/index.js
+node --test plugin/test/parse.test.mjs
 ```
 
 装进 DSH profile（CLI）：

@@ -66,12 +66,13 @@ def main() -> int:
         copied.append(p.name)
 
     source_rows: list[dict] = []
-    sp = imports / "sources-imported.jsonl"
-    if sp.exists():
-        for line in sp.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if line:
-                source_rows.append(json.loads(line))
+    for name in ("sources-imported.jsonl", "sources-scout.jsonl"):
+        sp = imports / name
+        if sp.exists():
+            for line in sp.read_text(encoding="utf-8").splitlines():
+                line = line.strip()
+                if line:
+                    source_rows.append(json.loads(line))
 
     if args.dry_run:
         print(f"would copy: {', '.join(copied) or '(none)'}")

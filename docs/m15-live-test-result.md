@@ -117,3 +117,25 @@ readiness.py --check -> PASS（五维 3.0）
 ```
 
 注意：`corrections.md` 仍是模拟访谈；阅文主体/岗位/财报口径仍待验证。完整 ramp 的 README 里写了同一套诚实声明。
+
+
+## 6. 自动合并 vs 手工合并（2026-10-19 追加）
+
+用 `merge_imports.py` 从同一份 `ramp-m15` 重新生成：
+
+```text
+/Users/meros/Documents/GitHub/m15-live/ramp-m15-full-auto/
+```
+
+结果：
+
+| 项目 | 手工合并 `ramp-m15-full` | 自动合并 `ramp-m15-full-auto` |
+|---|---|---|
+| 来源 | 44 | 44（sources-imported 5 + sources-scout 5，均自动重编号） |
+| 术语 / 活动 / 玩家 / 关系 / 域 | 77 / 25 / 14 / 10 / 8 | 77 / 25 / 14 / 10 / 8 |
+| strict | OK | OK |
+| readiness | PASS | PASS |
+| chain 插件段 | 手工 §9（较详细） | `## 插件导入（自动合并）`（通用） |
+| 额外人工内容 | 2 条 M1.5 待验证正文、README | `imports-merge-report.md` |
+
+结论：自动合并能复现 90% 的文件/计数/检查结果；**链路段叙述和客户特有的待验证项仍需人工补**，脚本只负责“搬运 + 来源重编号 + 标记段”。
