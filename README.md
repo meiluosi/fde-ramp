@@ -115,6 +115,7 @@ fde-ramp/
   examples/                    # 示例索引 + 两个完整跑通的运行（coalbed-methane-run/、web-novel-run/）
   docs/
     m15-live-test.md           # M1.5 真实导出实测步骤（装插件 → 导出 → compose）
+    m15-live-test-result.md    # 2026-10-19 实测结果、路径与踩坑
   plugin/
     roadmap.md                 # 以后做成插件时的工具/界面/发布计划
   REVIEW.md / REVIEW2.md / REVIEW3.md  # 三轮独立验收报告
@@ -162,7 +163,7 @@ fde-ramp/
 
 ## 当前状态
 
-- ✅ **v0.8.0（当前）**：M1.5 组合器完成——`m15_compose.py` 一键导入 `industry_map` / `industry_track` / `company_scan` / `scout` 的导出，生成组合报告；测试 23 项。
+- ✅ **v0.8.2（当前）**：M1.5 真实导出已实测（4/4 导入成功），结果与踩坑见 `docs/m15-live-test-result.md`；组合器、4 个导入器和 23 项测试均已完成。
 - ⏭ **下一步**：在真实环境安装三个插件，用 `m15_compose.py` 跑一次真实导出；然后把方案模式补进示例；最后插件化（M2/M3），见 `plugin/roadmap.md`。
 
 ## 已知限制

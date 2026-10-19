@@ -1,5 +1,7 @@
 # M1.5 真实导出实测（Live Test）
 
+> 2026-10-19 已实测一次，结果与踩坑见 [`m15-live-test-result.md`](m15-live-test-result.md)。
+
 > 目标：在真实 DSH 环境里装三个插件，跑一次 `industry_map` / `industry_track` / `company_scan` / `scout_export`，再用 `m15_compose.py` 生成导入草稿，验证适配层不是纸上谈兵。
 
 ## 0. 准备

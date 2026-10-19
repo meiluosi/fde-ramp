@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.8.2 · 2026-10-19
+
+- 完成 M1.5 真实导出实测：`industry_map`（9 节点/9 边）、`industry_track`（9 条）、`company_scan`（阅文集团）、`scout_export`（5 来源/5 主张）→ `m15_compose.py` 4/4 成功。
+- 新增 `docs/m15-live-test-result.md`：导出路径、组合输出、算例和踩坑。
+- 实测坑：`scout_export` 在 workspace-write 下写 workspace 被拒，写 `/tmp` 可用（已记录绕行方案）；`industry_track` quick 模式日期/分类可能为空；`company_scan` 无 `dataFiles` 时只有网页线索。
+- 导入器/文档同步：adapters 版本更新为实测版本（industry-research 0.3.23、scout 0.9.3），timeline 无分类显示「未分类」。
+
 ## v0.8.1 · 2026-10-18
 
 - 新增 `docs/m15-live-test.md`：真实环境安装三插件、跑 `industry_map`/`industry_track`/`company_scan`/`scout_export`、整理 `imports/`、跑 `m15_compose.py` 的完整实测步骤与对比表。

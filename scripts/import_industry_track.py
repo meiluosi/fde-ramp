@@ -66,7 +66,7 @@ def main() -> int:
     ]
     for e in sorted(entries, key=lambda x: (x.get("date") or ""), reverse=True):
         cat = e.get("evidenceCategory") or "uncategorized"
-        label = CATEGORY_LABEL.get(cat, cat)
+        label = CATEGORY_LABEL.get(cat, "未分类")
         title = str(e.get("title", "")).replace("|", "/")
         summary = str(e.get("summary") or "").replace("|", "/")
         url = str(e.get("url") or "")

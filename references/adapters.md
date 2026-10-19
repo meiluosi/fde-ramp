@@ -11,8 +11,8 @@
 
 | 插件 | 关键工具/入口 | 测试过的版本 |
 |---|---|---|
-| `dsh-industry-research` | `industry_map` / `industry_track` / `company_scan` / `industry_report` | 0.3.19 |
-| `dsh-scout` | `scout_start` / `scout_export` / `scout_questions` 等 12 个 | 0.9.3 |
+| `dsh-industry-research` | `industry_map` / `industry_track` / `company_scan` / `industry_report` | 0.3.23（2026-10-19 实测） |
+| `dsh-scout` | `scout_start` / `scout_export` / `scout_questions` 等 12 个 | 0.9.3（2026-10-19 实测） |
 | `@weibaohui/dsh-kb` | 侧栏「知识库」/ 搜索 / raw 上传 / `@` 引用 | 0.7.15 |
 
 安装示例（CLI profile；桌面 App 的 `desktop` profile 需在 App 内装）：
@@ -82,6 +82,8 @@ python3 scripts/import_scout_case.py \
 ```
 
 生成 `ramp/scout-import.md`：公司/岗位/决策、来源表（E0–E3）、主张表、访谈问题、合并建议。
+
+> **实测坑（DSH 0.2.1-rc.1 / workspace-write）**：`scout_export` 写 workspace 内任意目录都会报 `file access denied under workspace-write mode`；写 `/tmp` 可以。先导出到 `/tmp`，再复制进 workspace。详见 [`docs/m15-live-test-result.md`](../docs/m15-live-test-result.md)。
 
 ### 证据等级怎么映射
 
