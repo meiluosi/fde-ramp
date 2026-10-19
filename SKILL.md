@@ -238,7 +238,7 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 | `material-audit` | 客户给了架构/流程/制度文档，先抽结构、找缺口 | 用本 skill 的流程模板手工抽 |
 | `gap-rehearsal` | 把「必须拍板」的问题做成决策演练 | 用 `open-questions.md` 自问自答 |
 
-没有这些工具也能跑。具体接法（工具名、导出路径、导入脚本）见 `references/adapters.md`；原则性说明见 `references/integrations.md`。
+没有这些工具也能跑。具体接法（工具名、导出路径、导入脚本）见 `references/adapters.md`；三个插件都导出后，可以用一条命令生成导入草稿：`python3 scripts/m15_compose.py --imports imports --out-dir ramp`。
 
 ---
 

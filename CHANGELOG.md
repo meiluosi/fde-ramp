@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.8.0 · 2026-10-18
+
+- M1.5 组合器：
+  - 新增 `scripts/import_industry_track.py`（timeline.jsonl → 政策/动态草稿，按 evidenceCategory 给信心建议）；
+  - 新增 `scripts/import_company_card.py`（company_scan card.json → 公司速览卡草稿，含指标/缺口/来源）；
+  - 新增 `scripts/m15_compose.py`：按 `imports/` 目录一键导入 `industry_map` / `industry_track` / `company_scan` / `scout` 导出，生成 `m15-composition-report.md`（执行记录 + 合并清单）。
+- `references/adapters.md` 增加导入目录约定和一键命令；SKILL 工具章节补充。
+- `selftest.py` 增至 23 项（新增 timeline / company card / compose 测试）；两个示例仍通过 strict。
+- 说明：仍是离线导入验证，未在真实 profile 安装三插件；真实导出跑一次即可完成 M1.5 实测。
+
 ## v0.7.0 · 2026-10-18
 
 - 网文包补充：

@@ -98,6 +98,37 @@ python3 scripts/import_scout_case.py \
 - 在 `sources.jsonl` 里登记为来源（`url` 可写工作区路径，`sourceKind: other`）；
 - 没有脚本导入（kb 是固定知识库，不是文件格式）；这一步靠 Agent 检索 + 人工贴原句。
 
+## 3.5 一键导入：m15_compose.py
+
+如果三个插件都跑完、把导出文件收在一个目录里：
+
+```text
+imports/
+  industry-research/<行业>/
+    chain.json
+    sources.json
+    timeline.jsonl
+  industry-research/companies/<公司>/card.json
+  scout/<case>/case.json
+```
+
+一条命令生成所有导入草稿：
+
+```bash
+python3 scripts/m15_compose.py --imports imports --out-dir ramp
+```
+
+会生成：
+
+- `chain-seed.md` / `chain-seed.mmd`
+- `sources-imported.jsonl`
+- `timeline-import.md`
+- `company-card-<slug>.md`
+- `scout-import.md`
+- `m15-composition-report.md`（执行记录 + 下一步清单）
+
+它**只生成草稿，不覆盖** `chain.md` / `sources.jsonl` / `players.md`。合并步骤见报告第 3 节。
+
 ## 4. 推荐的组合顺序
 
 ```text

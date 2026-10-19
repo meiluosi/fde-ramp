@@ -71,7 +71,7 @@ python3 scripts/init_ramp.py --industry "煤层气" --customer "某公司" \
 python3 scripts/render_sources.py --root ramp   # 生成 sources.md（人看的来源清单）
 python3 scripts/validate_artifacts.py --root ramp
 python3 scripts/readiness.py --root ramp
-python3 scripts/selftest.py        # 20 项自测
+python3 scripts/selftest.py        # 23 项自测
 
 # 可选：算某个环节的成本/改进上限
 python3 scripts/calc_process.py --minutes 12 --freq 200 --error-rate 0.03 --cost-per-error 50 --hourly-rate 60
@@ -101,11 +101,14 @@ fde-ramp/
     init_ramp.py               # 生成 ramp/ 工作区
     render_sources.py          # 从 sources.jsonl 生成人看的 sources.md
     import_industry_map.py     # 把 dsh-industry-research 的 chain.json 转成 ramp 种子
+    import_industry_track.py   # 把 timeline.jsonl 转成政策/动态草稿
+    import_company_card.py     # 把 company_scan 的 card.json 转成公司卡草稿
     import_scout_case.py       # 把 dsh-scout 的 case.json 转成 ramp 草稿
+    m15_compose.py             # 一键导入三个插件的导出，生成组合报告
     validate_artifacts.py      # 检查来源引用、空模板、数量
     readiness.py               # 五个维度 + 证据够不够
     calc_process.py            # 算某环节的人力/风险成本与改进上限
-    selftest.py                # 20 项自测，CI 入口
+    selftest.py                # 23 项自测，CI 入口
   industries/
     coalbed-methane/           # 煤层气：AI 填好的公开源示例（不是模板）
     web-novel/                 # 网络文学：第二个行业包（验证通用性）
@@ -157,8 +160,8 @@ fde-ramp/
 
 ## 当前状态
 
-- ✅ **v0.7.0（当前）**：网文包补充玩家赛道/收入/画像 + 10 个关键环节真实例子；skill 同步增加玩家画像与环节例子指引；M1.5 适配层已完成。
-- ⏭ **下一步**：在真实环境安装三个插件做一次实测（沙箱里只能做离线导入验证）；然后把方案模式补进示例；最后插件化（M2/M3），见 `plugin/roadmap.md`。
+- ✅ **v0.8.0（当前）**：M1.5 组合器完成——`m15_compose.py` 一键导入 `industry_map` / `industry_track` / `company_scan` / `scout` 的导出，生成组合报告；测试 23 项。
+- ⏭ **下一步**：在真实环境安装三个插件，用 `m15_compose.py` 跑一次真实导出；然后把方案模式补进示例；最后插件化（M2/M3），见 `plugin/roadmap.md`。
 
 ## 已知限制
 

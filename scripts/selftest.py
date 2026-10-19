@@ -213,6 +213,45 @@ def main() -> int:
         r = run("import_scout_case.py", "--case", str(imp / "case.json"), "--out-dir", str(imp))
         check("import scout case", r.returncode == 0 and "数据口径" in (imp / "scout-import.md").read_text(encoding="utf-8"),
               r.stdout + r.stderr)
+
+        (imp / "timeline.jsonl").write_text(
+            "\n".join(json.dumps(x, ensure_ascii=False) for x in [
+                {"date": "2026-09-01", "title": "政策A", "url": "https://example.com/p1",
+                 "summary": "摘要", "capturedAt": "2026-10-01", "topics": [], "evidenceCategory": "confirmed-catalyst"},
+                {"date": "2026-09-02", "title": "媒体B", "url": "https://example.com/p2",
+                 "summary": "摘要", "capturedAt": "2026-10-01", "topics": [], "evidenceCategory": "market-narrative"},
+            ]) + "\n", encoding="utf-8",
+        )
+        r = run("import_industry_track.py", "--timeline", str(imp / "timeline.jsonl"), "--out-dir", str(imp))
+        check("import industry_track", r.returncode == 0 and "政策A" in (imp / "timeline-import.md").read_text(encoding="utf-8"),
+              r.stdout + r.stderr)
+
+        card = {
+            "name": "ACME", "slug": "acme", "asOf": "2026-10-01",
+            "sources": [], "outline": [{"path": "/a.md", "headings": ["一、业务"]}],
+            "figureCandidates": [], "webSources": [], "gaps": ["缺 2026Q3"],
+            "disclaimer": "仅供研究", "metrics": [{"key": "营业收入", "value": 1, "unit": "亿元",
+                                                            "asOf": "2025-12-31", "source": "/a.md"}],
+        }
+        (imp / "card.json").write_text(json.dumps(card, ensure_ascii=False), encoding="utf-8")
+        r = run("import_company_card.py", "--card", str(imp / "card.json"), "--out-dir", str(imp))
+        check("import company card", r.returncode == 0 and "营业收入" in (imp / "company-card-acme.md").read_text(encoding="utf-8"),
+              r.stdout + r.stderr)
+
+        imports = tmp / "imports"
+        ir = imports / "industry-research" / "测试行业"
+        companies = imports / "industry-research" / "companies" / "acme"
+        scouts = imports / "scout" / "acme"
+        for d in (ir, companies, scouts):
+            d.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(imp / "chain.json", ir / "chain.json")
+        shutil.copy2(imp / "sources.json", ir / "sources.json")
+        shutil.copy2(imp / "timeline.jsonl", ir / "timeline.jsonl")
+        shutil.copy2(imp / "card.json", companies / "card.json")
+        shutil.copy2(imp / "case.json", scouts / "case.json")
+        r = run("m15_compose.py", "--imports", str(imports), "--out-dir", str(tmp / "compose"))
+        check("m15 compose", r.returncode == 0 and "失败 0" in (tmp / "compose" / "m15-composition-report.md").read_text(encoding="utf-8"),
+              r.stdout + r.stderr)
         check(
             "verification-table ❓ not counted as flow node",
             flow_guess_count(
