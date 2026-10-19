@@ -113,6 +113,8 @@ fde-ramp/
     coalbed-methane/           # 煤层气：AI 填好的公开源示例（不是模板）
     web-novel/                 # 网络文学：第二个行业包（验证通用性）
   examples/                    # 示例索引 + 两个完整跑通的运行（coalbed-methane-run/、web-novel-run/）
+  docs/
+    m15-live-test.md           # M1.5 真实导出实测步骤（装插件 → 导出 → compose）
   plugin/
     roadmap.md                 # 以后做成插件时的工具/界面/发布计划
   REVIEW.md / REVIEW2.md / REVIEW3.md  # 三轮独立验收报告

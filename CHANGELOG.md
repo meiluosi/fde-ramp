@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8.1 · 2026-10-18
+
+- 新增 `docs/m15-live-test.md`：真实环境安装三插件、跑 `industry_map`/`industry_track`/`company_scan`/`scout_export`、整理 `imports/`、跑 `m15_compose.py` 的完整实测步骤与对比表。
+- README / `references/adapters.md` 增加入口；不改代码与测试。
+
 ## v0.8.0 · 2026-10-18
 
 - M1.5 组合器：
