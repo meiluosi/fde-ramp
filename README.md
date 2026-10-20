@@ -18,16 +18,24 @@
 2. **空模板**：`templates/`，AI 生成 `ramp/` 工作区时自动复制，内容要 AI 去填。
 3. **填好的示例**：`industries/coalbed-methane/`（煤层气）和 `industries/web-novel/`（网络文学），AI 用公开资料填出来的行业案例，用来看「填完长什么样」，不是答案。
 
-## 怎么用（四步）
+## 怎么用（第 0 步 + 四步）
 
 | 步骤 | 做什么 | 产出 |
 |---|---|---|
+| 第 0 步 · 决策简报 | 先写清要做什么决策、谁拍板、成功标准、错误代价、什么证据会推翻判断 | `decision-brief.md` |
 | 第 1 步 · 画地图 | 读 3 份行业报告 + 客户年报/官网 + 监管目录；画钱怎么流；再画全链路关系：每段有谁、什么关系、下一步想干什么 | `value-chain.md`、`chain.md`、`sources.jsonl` |
 | 第 2 步 · 行话小抄 | AI 先列 60–80 个候选（研报 + 公众号/知乎/B站/播客的从业者科普）→ 用客户文档校准 → 收敛到约 50 词 | `glossary.md`、`calibration-log.md` |
 | 第 3 步 · 拆业务 | 先分业务域 → 再画流程 → 再拆活动表（做什么/谁做/影响谁/工具/为什么/多久一次/常见异常/上下游交接/谁验收/是否外包） | `domains.md`、`flow.md`、`activities.md`、`verification-list.md` |
 | 第 4 步 · 去被改 | 带链路图、域图、活动表去找一线员工：「我画了张图，肯定有不对的地方，您帮我改改」 | `corrections.md` + 改过的图/表 |
 
 **不设固定时长。** 资料少就快，约不到人就慢；但第 4 步不能省——没有它，前面三步只是练习。
+
+### 两种模式，两种布局
+
+- **explore（默认）**：先跑通、先找缺口；允许公开源 + 模拟访谈，用于内部分析。
+- **client-ready（对外）**：必须真实访谈、≥3 个 `verified` 术语、provenance 标 `customer`；`readiness --client --check` 会拦住模拟内容。
+- **minimal（默认）**：13 个文件，先跑完第 0–4 步；**full**：`init_ramp.py --full` 才生成旧版 24 个文件。
+- 对外前把 `state.json` 的 `mode` 改成 `client-ready`，并填好 `provenance`。
 
 ### 可选第 5 步：方案模式（算账 + 找机会）
 
@@ -37,9 +45,10 @@
 - 算两个成本：`每天人力成本 = 耗时÷60×日频次×人力单价`，`每天风险成本 = 出错率×日频次×单次代价`，相加是**改进上限**；
 - 用六个信号找 AI 机会（重复人工判断 / 信息散在多系统 / 大量非结构化文档 / 有标准但靠人记 / 流程大量等待 / 有人在偷偷自救）；
 - 四个维度打分：业务价值、可行性、数据可得性、政治阻力；数据/政治红灯先解决；
-- 第一个项目选**第一象限最靠右**的（最容易落地），不是最靠上的。
+- 第一个项目选**第一象限最靠右**的（最容易落地），不是最靠上的；
+- 再做**方案匹配**（AI 任务类型/数据/人工复核/集成）、**试点计划**（基线/目标/测量/护栏/停止条件）和**净 ROI**（扣建设/运行成本）。
 
-详见 [opportunity-analysis.md](references/opportunity-analysis.md)，模板在 `templates/process-metrics.md` / `templates/opportunities.md` / `templates/business-case.md`。
+详见 [opportunity-analysis.md](references/opportunity-analysis.md)，模板在 `templates/process-metrics.md` / `templates/opportunities.md`；访谈工具包见 [map-and-negate.md](references/map-and-negate.md) 第 11 节。
 
 ## 谁填？
 
@@ -68,13 +77,19 @@ ln -s ~/Documents/GitHub/fde-ramp ~/.dsh/skills/fde-ramp
 cd ~/Documents/GitHub/fde-ramp
 python3 scripts/init_ramp.py --industry "煤层气" --customer "某公司" \
     --persona "技术负责人" --deadline 2026-10-25
+# 默认 minimal 13 文件；要旧版完整布局加 --full
 python3 scripts/render_sources.py --root ramp   # 生成 sources.md（人看的来源清单）
+python3 scripts/next_steps.py --root ramp      # 下一步最该做的 3 件事
 python3 scripts/validate_artifacts.py --root ramp
 python3 scripts/readiness.py --root ramp
-python3 scripts/selftest.py        # 23 项自测
+python3 scripts/readiness.py --root ramp --client --check   # 对外前用
+python3 scripts/check_sources.py --root ramp  # URL 可达 + 新鲜度
+python3 scripts/consistency.py --root ramp    # 跨文件一致性
+python3 scripts/selftest.py                   # 30 项自测
 
-# 可选：算某个环节的成本/改进上限
-python3 scripts/calc_process.py --minutes 12 --freq 200 --error-rate 0.03 --cost-per-error 50 --hourly-rate 60
+# 可选：算某个环节的成本 / 净 ROI
+python3 scripts/calc_process.py --minutes 12 --freq 200 --error-rate 0.03 --cost-per-error 50 --hourly-rate 60 \
+    --realization 0.4 --build-cost 200000 --run-cost-per-day 200
 ```
 
 若已作为 skill 安装，脚本在 `~/.dsh/skills/fde-ramp/scripts/` 下，可在任意工作区用绝对路径调用。
@@ -97,8 +112,9 @@ fde-ramp/
     opportunity-analysis.md    # 四个数字、六个 AI 信号、四维打分、第一项目选择
     adapters.md                # 与 dsh-industry-research / dsh-scout / dsh-kb 的具体接法
   templates/                   # 空模板（AI 填）
+    decision-brief.md          # 第 0 步：决策、拍板人、成功标准、干系人
   scripts/
-    init_ramp.py               # 生成 ramp/ 工作区
+    init_ramp.py               # 生成 ramp/ 工作区（默认 minimal；--full 完整）
     render_sources.py          # 从 sources.jsonl 生成人看的 sources.md
     import_industry_map.py     # 把 dsh-industry-research 的 chain.json 转成 ramp 种子
     import_industry_track.py   # 把 timeline.jsonl 转成政策/动态草稿
@@ -110,7 +126,10 @@ fde-ramp/
     readiness.py               # 五个维度 + 证据够不够
     calc_process.py            # 算某环节的人力/风险成本与改进上限
     render_dashboard.py        # 生成 dashboard.html（四数字表 + 机会象限）
-    selftest.py                # 23 项自测，CI 入口
+    next_steps.py              # 下一步最该做的 3 件事
+    check_sources.py           # URL 可达 + 来源新鲜度
+    consistency.py             # 跨文件一致性
+    selftest.py                # 30 项自测，CI 入口
   industries/
     coalbed-methane/           # 煤层气：AI 填好的公开源示例（不是模板）
     web-novel/                 # 网络文学：第二个行业包（验证通用性）
@@ -123,7 +142,9 @@ fde-ramp/
   plugin/
     package.json               # dsh-fde-ramp npm 包骨架
     cordis.patch.yml
-    lib/index.js               # 当前只注册 ramp_status（只读）
+    lib/index.js               # Host 工具（5 只读 + 2 单条写 + 2 批量写）
+    lib/panel.js               # Web 面板 API（/fde-ramp/api/snapshot）
+    client/                    # 侧栏面板（需重启 DSH 生效）
     README.md
     roadmap.md                 # 工具/界面/发布计划
   REVIEW.md / REVIEW2.md / REVIEW3.md  # 三轮独立验收报告
@@ -141,6 +162,9 @@ fde-ramp/
 | 对话 | 能不能问出好问题、接住反对、不知道时承认并追问 |
 
 目标：五项都到 3 分；最低不低于 2 分；还要有证据（来源、术语、待验证、玩家关系、业务域、活动行、访谈修正）。自检脚本会查这些，光自报分数不算。
+
+- **explore**：公开源 + 模拟访谈可以跑通，但只能内部用；
+- **client-ready**：`readiness --client --check` 额外要求真实访谈、≥3 个 `verified` 术语、A/B 来源占比、`provenance.evidence=customer`、`reviewedBy` 非空；示例永远停在 explore。
 
 ## 煤层气示例
 
@@ -167,7 +191,25 @@ fde-ramp/
 - [`examples/coalbed-methane-run/`](examples/coalbed-methane-run/README.md)：煤层气，31 条来源、78 个术语、36 行活动表；
 - [`examples/web-novel-run/`](examples/web-novel-run/README.md)：网络文学，34 条来源、77 个术语、25 行活动表。
 
-两个都是从 `init_ramp.py` 生成、走完四步、通过 `validate_artifacts.py --strict` 和 `readiness.py --check` 的完整 `ramp/` 示例。都含 5 处**模拟访谈**修正（已标注是虚构示例，只演示记录格式）。
+两个都是从 `init_ramp.py --full` 生成、走完四步、通过 `validate_artifacts.py --strict` 和 `readiness.py --check` 的完整 `ramp/` 示例。都含 5 处**模拟访谈**修正（已标注是虚构示例，只演示记录格式）。它们都是 `mode: explore`，不会通过 `--client` 门禁——这是刻意设计。
+
+## 最小布局 vs 完整布局
+
+- **minimal（默认）**：13 个文件，覆盖第 0–4 步 + 待验证 + brief；适合第一次跑通；
+- **full（`--full`）**：24 个文件，含 `flow.md`、`value-chain.md`、`readiness.md`、drill/calibration、方案模式三件套；
+- 两个布局都通过 `validate_artifacts.py`（state.layout 自动识别）；
+- 对外前先 `next_steps.py` 看缺口，再 `readiness --client --check`。
+
+## 交接契约
+
+| 下游 | 从这里拿 | 建议字段 |
+|---|---|---|
+| `fde-problem-framing` | `decision-brief.md`、`opportunities.md`、`verification-list.md` | 决策、成功标准、候选机会、未核实项 |
+| `fde-comms` | `brief.md`、`map-and-negate.md` 第 11 节 | 对方关心什么、必问、反对意见 |
+| `fde-demo` | `opportunities.md` 的方案匹配/试点计划 | 第一项目、数据、评估指标 |
+| `fde-pilot` | `opportunities.md` 的净 ROI/试点计划 | 基线、目标、护栏、停止条件 |
+
+跨 skill 引用保留编号：`ramp:S01`、`ramp:V2`；结论词按阶段加前缀，如 `framing:Proceed`、`demo:Proceed`。
 
 ## FDE Skill 系列
 
@@ -187,8 +229,8 @@ fde-ramp/
 
 ## 当前状态
 
-- ✅ **v0.9.5（当前）**：M3 侧栏面板（客户端 bundle + Host snapshot API）已接入 desktop profile；13 项单测；写工具批量/备份/diff 可用。
-- ⏭ **下一步**：在真实环境安装三个插件，用 `m15_compose.py` 跑一次真实导出；然后把方案模式补进示例；最后插件化（M2/M3），见 `plugin/roadmap.md`。
+- ✅ **v1.0.0（当前）**：收敛完成——explore/client-ready 分层、第 0 步决策简报、默认 minimal 13 文件、净 ROI/试点/干系人/访谈包、来源检查/一致性/next_steps；插件读写工具与侧栏面板仍保留。
+- ⏭ **下一步**：用真实客户跑一次 explore → 访谈 → client-ready；收集哪些字段真正被用、哪些可以再删。
 
 ## 已知限制
 

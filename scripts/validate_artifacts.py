@@ -14,8 +14,9 @@ import re
 import sys
 from pathlib import Path
 
-REQUIRED = [
+FULL_REQUIRED = [
     "plan.md",
+    "decision-brief.md",
     "state.json",
     "sources.jsonl",
     "sources.md",
@@ -35,6 +36,22 @@ REQUIRED = [
     "readiness.md",
     "drill-scorecard.md",
     "calibration-log.md",
+]
+
+MINIMAL_REQUIRED = [
+    "state.json",
+    "sources.jsonl",
+    "sources.md",
+    "decision-brief.md",
+    "plan.md",
+    "chain.md",
+    "chain.mmd",
+    "domains.md",
+    "activities.md",
+    "glossary.md",
+    "verification-list.md",
+    "corrections.md",
+    "brief.md",
 ]
 
 SOURCE_RE = re.compile(r"\[S(\d+)\]")
@@ -263,19 +280,23 @@ def main() -> int:
         print(f"not a directory: {root}", file=sys.stderr)
         return 2
 
-    for name in REQUIRED:
+    try:
+        state = json.loads((root / "state.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"ERROR: state.json: invalid or missing ({exc})")
+        return 1
+
+    layout = state.get("layout")
+    if layout not in {"minimal", "full"}:
+        layout = "full" if (root / "value-chain.md").exists() and (root / "plan.md").exists() else "minimal"
+    required = FULL_REQUIRED if layout == "full" else MINIMAL_REQUIRED
+    for name in required:
         if not (root / name).exists():
             errors.append(f"missing required file: {name}")
 
     if errors:
         for e in errors:
             print("ERROR:", e)
-        return 1
-
-    try:
-        state = json.loads((root / "state.json").read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
-        print(f"ERROR: state.json: invalid JSON ({exc.msg})")
         return 1
 
     for dim, score in (state.get("dimensions") or {}).items():
@@ -317,10 +338,12 @@ def main() -> int:
     if v_items < 5:
         warnings.append(f"verification-list: only {v_items} filled items (target >=5)")
 
-    flow = (root / "flow.md").read_text(encoding="utf-8")
-    q = flow_guess_count(flow)
-    if q < 5:
-        warnings.append(f"flow: only {q} guessed node rows '❓' (target >=5)")
+    flow_path = root / "flow.md"
+    q = 0
+    if flow_path.exists():
+        q = flow_guess_count(flow_path.read_text(encoding="utf-8"))
+        if q < 5:
+            warnings.append(f"flow: only {q} guessed node rows '❓' (target >=5)")
 
     corrections = (root / "corrections.md").read_text(encoding="utf-8")
     corr = correction_count(corrections)
@@ -360,7 +383,7 @@ def main() -> int:
         if counts.get(key) != value:
             warnings.append(f"state.counts.{key}={counts.get(key)} but files have {value}")
 
-    print(f"root: {root}")
+    print(f"root: {root}  layout: {layout}")
     print(
         f"sources: {len(sources)}  terms: {terms}  verification: {v_items}  corrections: {corr}  guessed nodes: {q}"
     )

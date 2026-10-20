@@ -4,6 +4,15 @@
 >
 > 这不是考试，是一张「还差什么」的清单。每一分都要能指到具体文件，不能凭感觉。
 
+## 两种模式
+
+| 模式 | 用途 | 证据要求 |
+|---|---|---|
+| `explore` | 内部探索、见客户前练习 | 公开源可以；模拟访谈只能演示，不能对外 |
+| `client-ready` | 拿给客户/立项会 | 真实访谈修正；≥3 个 `verified` 术语；A/B 来源 ≥5 且占比 ≥50%；`decision-brief.md` 已填；`provenance.evidence=customer` 且 `reviewedBy` 非空 |
+
+`readiness --client --check` 会检查这些；示例永远是 explore。
+
 ## 打分总则
 
 - **看证据**：说「语言 3 分」，要能指到 `glossary.md` 的哪几行、`calibration-log.md` 的哪条记录。

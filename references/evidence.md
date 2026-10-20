@@ -3,6 +3,13 @@
 > 一句话：**事实带来源，推断标推断，不知道的进清单。**
 > 一份材料里出现一个没有来源的关键数字，整份材料的可信度就归零。
 
+## 0. 两个元字段：provenance 与新鲜度
+
+- `state.provenance`：`generatedBy`（ai/human）、`evidence`（public/customer）、`reviewedBy`、`lastReviewed`；
+- 没有 `evidence=customer` 和 `reviewedBy`，只能是 explore，不能标 client-ready；
+- `sources.jsonl` 每条有 `accessed`；`scripts/check_sources.py` 会报超过 180 天未验证的源；
+- 对外材料里的数字必须能回到「客户确认」或「A/B 级来源 + 日期」。
+
 ## 1. 来源分级
 
 | tier | 类型 | 例子 | 用法 |

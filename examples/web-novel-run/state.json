@@ -49,7 +49,16 @@
     "brief": "brief.md",
     "readiness": "readiness.md",
     "drill_scorecard": "drill-scorecard.md",
-    "calibration_log": "calibration-log.md"
+    "calibration_log": "calibration-log.md",
+    "decision_brief": "ramp/decision-brief.md"
   },
-  "gaps": []
+  "gaps": [],
+  "mode": "explore",
+  "layout": "full",
+  "provenance": {
+    "generatedBy": "ai",
+    "evidence": "public",
+    "reviewedBy": "",
+    "lastReviewed": ""
+  }
 }

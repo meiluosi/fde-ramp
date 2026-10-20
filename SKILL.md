@@ -1,6 +1,6 @@
 ---
 name: fde-ramp
-description: 帮一个刚接触陌生行业的人，在见客户前快速搭起这个行业的基本盘：行业怎么赚钱、链条上有谁、行话怎么说、客户业务怎么运转，然后拿着自己画的图去让一线员工改；可选第 5 步用四个数字（耗时/日频次/出错率/单次代价 + 人力单价）算改进上限、按六个 AI 信号和四维打分选出第一个项目。适合 FDE / 售前 / 交付 / 顾问第一次做某个行业，或用户说「帮我快速搞懂 X 行业」「下周要见客户」「帮我准备一份行业 brief」「帮我找 AI 落地机会」。
+description: 帮一个刚接触陌生行业的人，在见客户前快速搭起这个行业的基本盘：先写决策简报，再画行业地图、行话、业务域/流程/活动，拿图去让一线员工改；可选第 5 步算账找 AI 机会并做方案匹配/试点/净 ROI。支持 explore（公开源）和 client-ready（真实访谈）两种模式，默认 minimal 13 文件。适合 FDE / 售前 / 交付 / 顾问第一次做某个行业，或用户说「帮我快速搞懂 X 行业」「下周要见客户」「帮我准备一份行业 brief」「帮我找 AI 落地机会」。
 ---
 
 # 快速入门一个行业（FDE 用）
@@ -29,10 +29,12 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 5. 客户给了什么材料？
 6. 能不能见到一线员工？
 
-问清楚后，在工作区建 `ramp/`。**两种用法，同一个 skill：**
+问清楚后，在工作区建 `ramp/`。**同一个 skill，两种模式、两种布局：**
 
-- **入门模式（第 1–4 步）**：只想到见客户时能听懂、能问出内行问题；
-- **方案模式（第 1–5 步）**：还想给客户提 AI 改造方案。多做的第 5 步是「算账 + 找最值得做的机会」，用客户自己的数字说话。
+- **explore（默认）**：公开源 + 模拟访谈可以跑通，只用于内部；示例永远是 explore；
+- **client-ready（对外）**：真实访谈、≥3 个 `verified` 术语、provenance 标 customer，`readiness --client --check` 才放行；
+- **minimal（默认 13 文件）**：先跑通第 0–4 步；**full（`--full`，24 文件）**：要完整旧布局/方案三件套时再用；
+- 入门模式（第 0–4 步）/ 方案模式（第 0–5 步），第 5 步是「算账 + 找最值得做的机会」。
 
 每填完一份，先给用户看 5 行摘要，不要一次倒全文。
 
@@ -45,6 +47,23 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 3. 术语只能到「公开说法」；没有客户文档，就不许标「已校准」。
 4. 第一次见客户就说明：「我按公开资料画了一版，肯定和你们实际不一样，您帮我改。」
 5. 来源清单（`sources.md`）尤其重要——这是你「有依据」的证明。
+
+---
+
+## 第 0 步：先写决策简报（不要跳过）
+
+动手画图前，先回答：**这次到底要做什么决策？**
+
+填 `decision-brief.md`（模板已生成）：
+
+- 要做的决策：见客户 / 选方向 / 定试点 / 批预算；
+- 拍板人、使用人、决策触发；
+- 成功标准（客户 KPI）、约束、判断错了的代价；
+- **什么证据会改变我的判断**——这一列填不出来，说明研究还没有决策价值；
+- 干系人与采用：谁得到什么、谁失去什么、谁可能阻挠；
+- 明确这次不做什么。
+
+如果客户什么都没给，也先写“假设版”，见客户后再改。
 
 ---
 
@@ -149,7 +168,7 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 6. 如果装了 `dsh-scout`：先用它做公司主体核验/证据分级/访谈问题，再运行 `scripts/import_scout_case.py` 生成 `scout-import.md`，把未核实项并进 `verification-list.md`。见 `references/adapters.md`。
 7. 如果要做方案：**顺手把重点环节的四个数字问出来**——耗时、日频次、出错率、单次代价；再问清「这一步谁做、什么职级」，回去找 HR/财务要人力单价。问法见 `references/opportunity-analysis.md`。
 
-验收：至少拿到 5 处实质修正，每处都知道「为什么」。
+验收：至少拿到 5 处实质修正，每处都知道「为什么」。按角色的问题库、追问句式和记录/同意要求见 `references/map-and-negate.md` 第 11 节。
 
 常见错误：问「请给我讲讲」；被纠正时辩解；只访谈一个人；只记结论不记原因；回来不改图。
 
@@ -181,7 +200,14 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 
 **第一个项目怎么选**：选第一象限里**最靠右**的（最容易落地），不是最靠上的（价值最高）。第一个项目要的是「证明这条路走得通」，不是最大收益。
 
-产出：`process-metrics.md`（四个数字 + 成本/上限）、`opportunities.md`（信号 + 四维打分 + 象限 + 第一项目）、`business-case.md`（一页纸方案）。详细方法见 `references/opportunity-analysis.md`；算账可以用 `scripts/calc_process.py`。
+**再往下走一步（方案闭环）**：
+
+- **方案匹配**：AI 任务类型（抽取/分类/摘要/检索/生成/Agent）、数据/系统、错误容忍与人工复核、集成方式、自建/采购、评估指标；
+- **试点计划**：范围、基线、目标、测量、护栏、停止条件、负责人、采用指标；
+- **净 ROI**：`可实现收益 = 毛上限 × 可实现比例 × 250 天`；`净收益 = 可实现收益 - 建设成本 - 年运行成本`；回收期；
+- **干系人与采用**：回到 `decision-brief.md` 第 6 节，别把政治红灯留到试点。
+
+产出：`process-metrics.md`（四个数字 + 成本/上限）、`opportunities.md`（信号 + 四维 + 象限 + 第一项目 + 方案匹配 + 试点 + 净 ROI）。详细方法见 `references/opportunity-analysis.md`；算账用 `scripts/calc_process.py`（支持 `--realization/--build-cost/--run-cost-per-day`）。
 
 ---
 
@@ -207,6 +233,21 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 
 目标：五项都到 3 分；最低不能低于 2 分；还要有足够证据（来源、术语、待验证、玩家关系、业务域、活动行、访谈修正）。自检脚本会查，具体门槛见 rubric。
 
+**对外前（client-ready）额外门禁**：
+
+```bash
+python3 scripts/readiness.py --root ramp --client --check
+```
+
+- `state.mode == "client-ready"`；
+- 修正记录里没有「模拟/虚构」；
+- `verified` 术语 ≥3；
+- A/B 级来源 ≥5 且占比 ≥50%；
+- `decision-brief.md` 已填；
+- `provenance.evidence == "customer"` 且 `reviewedBy` 非空。
+
+不满足就还是 explore，不要拿模拟示例对外。
+
 **方案模式额外检查**（不做方案可跳过）：
 
 - [ ] 重点环节的四个数字都有，且标了来源/信心；
@@ -221,6 +262,7 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 ## 证据规则（简单版）
 
 - 事实带 `[S01]`；推断写「推断」；不知道进 `verification-list.md`。
+- 文件/工作区要标 provenance：`generatedBy`、`evidence`（public/customer）、`reviewedBy`、`lastReviewed`；没有 provenance 的结论不能算 client-ready。
 - 超过 12 个月的动态数字，标「可能过时」。
 - 单位/口径写清楚（含税/不含税、方/标方、产量/销量/利用量）。
 - 优先级：客户文档 > 官方文件 > 行业报告 > 媒体/公众号。
@@ -256,6 +298,8 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 10. 算账只算耗时/频次/出错率，漏了人力单价——算不出钱。
 11. 用行业平均数字代替客户自己的数字——客户不信。
 12. 第一个项目挑「价值最高」而不是「最容易落地」——第一个项目失败，后面很难推。
+13. 把模拟访谈的 readiness PASS 当成“可以对外”——未过 `--client` 门禁就还是 explore。
+14. 方案只算毛改进上限，不扣建设/运行成本——ROI 会被高估。
 
 ---
 
@@ -266,10 +310,13 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 ```bash
 RAMP=~/.dsh/skills/fde-ramp
 
-# 1) 生成 ramp/ 工作区（把参数换成你的行业/客户）
+# 1) 生成 ramp/ 工作区（默认 minimal 13 文件；要完整旧布局加 --full）
 python3 "$RAMP/scripts/init_ramp.py" --industry "煤层气" --customer "某公司" --persona "技术负责人" --deadline 2026-10-25
 
-# 2) 生成给人看的来源清单
+# 2) 看下一步最该做的 3 件事
+python3 "$RAMP/scripts/next_steps.py" --root ramp
+
+# 3) 生成给人看的来源清单
 python3 "$RAMP/scripts/render_sources.py" --root ramp
 
 # 3) 填完后检查：来源引用、是否有空模板、各项数量
@@ -277,6 +324,13 @@ python3 "$RAMP/scripts/validate_artifacts.py" --root ramp
 
 # 4) 自检：五个维度 + 证据够不够
 python3 "$RAMP/scripts/readiness.py" --root ramp
+
+# 5) 对外前：client-ready 门禁
+python3 "$RAMP/scripts/readiness.py" --root ramp --client --check
+
+# 6) 来源可达/新鲜度 + 跨文件一致性
+python3 "$RAMP/scripts/check_sources.py" --root ramp
+python3 "$RAMP/scripts/consistency.py" --root ramp
 
 # 可选：算某个环节每天的人力/风险成本与改进上限
 python3 "$RAMP/scripts/calc_process.py" --minutes 12 --freq 200 --error-rate 0.03 --cost-per-error 50 --hourly-rate 60

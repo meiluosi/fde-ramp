@@ -19,6 +19,7 @@ TEMPLATES = REPO / "templates"
 
 # template file -> destination file
 FILES = {
+    "decision-brief.md": "decision-brief.md",
     "plan.md": "plan.md",
     "sources.md": "sources.md",
     "value-chain.md": "value-chain.md",
@@ -42,6 +43,12 @@ FILES = {
     "business-case.md": "business-case.md",
 }
 
+MINIMAL = {
+    "decision-brief.md", "plan.md", "sources.md", "chain.md", "chain.mmd",
+    "domains.md", "activities.md", "glossary.md", "verification-list.md",
+    "corrections.md", "brief.md",
+}
+
 
 def render(text: str, values: dict[str, str]) -> str:
     for key, value in values.items():
@@ -57,6 +64,9 @@ def main() -> int:
     parser.add_argument("--deadline", default="待确认")
     parser.add_argument("--out", default="ramp")
     parser.add_argument("--force", action="store_true", help="overwrite non-empty output dir")
+    parser.add_argument("--mode", choices=["explore", "client-ready"], default="explore", help="readiness mode")
+    parser.add_argument("--full", action="store_true", help="generate the full legacy set (24 files)")
+    parser.add_argument("--minimal", action="store_true", help="generate the minimal set (default)")
     args = parser.parse_args()
 
     out = Path(args.out).resolve()
@@ -73,7 +83,8 @@ def main() -> int:
         "DATE": dt.date.today().isoformat(),
     }
 
-    for src_name, dst_name in FILES.items():
+    selected = FILES if args.full else {k: v for k, v in FILES.items() if Path(k).name in MINIMAL}
+    for src_name, dst_name in selected.items():
         src = TEMPLATES / src_name
         if not src.exists():
             print(f"missing template: {src}", file=sys.stderr)
@@ -92,9 +103,13 @@ def main() -> int:
     (out / "state.json").write_text(json.dumps(rendered, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(f"ramp workspace created: {out}")
-    print("next: fill value-chain.md, then run:")
+    print(f"layout: {'full' if args.full else 'minimal'}  mode: {args.mode}")
+    print("next: fill decision-brief.md, then chain.md / domains.md / activities.md")
+    print(f"  python3 {Path(__file__).with_name('next_steps.py')} --root {args.out}")
     print(f"  python3 {Path(__file__).with_name('validate_artifacts.py')} --root {args.out}")
     print(f"  python3 {Path(__file__).with_name('readiness.py')} --root {args.out}")
+    if not args.full:
+        print("需要完整 24 文件旧布局时加 --full；对外前把 state.mode 改成 client-ready 并跑 readiness --client --check")
     return 0
 
 

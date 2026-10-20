@@ -2,14 +2,18 @@
 
 > 给第一次用 `fde-ramp` 的人。先看这一页，再去看 SKILL.md 的全文。
 
-## 0. 三条命令
+## 0. 几条命令
 
 ```bash
 RAMP=~/.dsh/skills/fde-ramp
+# 默认 minimal 13 文件；要完整旧布局加 --full
 python3 "$RAMP/scripts/init_ramp.py" --industry "煤层气" --customer "某公司" --persona "技术负责人" --deadline 2026-10-25
-python3 "$RAMP/scripts/render_sources.py" --root ramp     # 生成人看的来源清单 sources.md
+python3 "$RAMP/scripts/next_steps.py" --root ramp        # 下一步最该做的 3 件事
+python3 "$RAMP/scripts/render_sources.py" --root ramp    # 生成人看的来源清单 sources.md
 python3 "$RAMP/scripts/validate_artifacts.py" --root ramp
 ```
+
+> 两种模式：`explore`（默认，公开源可跑）和 `client-ready`（对外，必须真实访谈 + verified 术语）。示例永远是 explore。
 
 ## 1. 先问清 6 件事
 
@@ -17,6 +21,11 @@ python3 "$RAMP/scripts/validate_artifacts.py" --root ramp
 缺一项就问，**不要猜**。
 
 **如果客户什么都没给**：别等材料，直接按公开资料画；所有关于这家客户的判断都标 ❓ 或「待客户确认」，第一次见面就说「我按公开资料画了一版，肯定和你们实际不一样，您帮我改」。来源清单（`sources.md`）一定要有。
+
+## 1.5 第 0 步：先写决策简报
+
+填 `decision-brief.md`：要做什么决策、谁拍板、成功标准、约束、判断错了的代价、**什么证据会改变我的判断**、干系人与采用。
+这页填不出来，后面的图大概率是“行业旅游”。
 
 ## 2. 第 1 步：把行业地图画出来
 
@@ -60,7 +69,9 @@ python3 "$RAMP/scripts/validate_artifacts.py" --root ramp
 - 人力成本 = 耗时÷60×日频次×人力单价；风险成本 = 出错率×日频次×单次代价；相加是改进上限；
 - 六个信号找机会：重复判断 / 信息散在多系统 / 大量非结构化文档 / 有标准靠人记 / 大量等待 / 有人偷偷自救；
 - 四维打分：业务价值、可行性、数据可得性、政治阻力；数据/政治红灯先解决；
-- 第一个项目选「第一象限最靠右」，不是最靠上。
+- 第一个项目选「第一象限最靠右」，不是最靠上；
+- 再做方案匹配（AI 任务/数据/人工复核/集成）、试点计划（基线/目标/测量/护栏/停止）、净 ROI（扣建设/运行成本）；
+- 访谈工具包见 `references/map-and-negate.md` 第 11 节。
 
 详见 `references/opportunity-analysis.md`。
 
@@ -85,6 +96,17 @@ python3 "$RAMP/scripts/validate_artifacts.py" --root ramp
 
 ```bash
 python3 "$RAMP/scripts/readiness.py" --root ramp
+python3 "$RAMP/scripts/check_sources.py" --root ramp
+python3 "$RAMP/scripts/consistency.py" --root ramp
 ```
 
 看五个维度还差什么；没通过就写「差在哪、下一步做什么」。
+
+对外前必须：
+
+```bash
+# 先把 state.mode 改成 client-ready，填好 provenance
+python3 "$RAMP/scripts/readiness.py" --root ramp --client --check
+```
+
+模拟访谈、0 个 verified 术语、A/B 来源不足，都会被拦下。

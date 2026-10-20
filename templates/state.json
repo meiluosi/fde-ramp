@@ -5,6 +5,14 @@
   "persona": "{{PERSONA}}",
   "deadline": "{{DEADLINE}}",
   "started": "{{DATE}}",
+  "mode": "explore",
+  "layout": "minimal",
+  "provenance": {
+    "generatedBy": "ai",
+    "evidence": "public",
+    "reviewedBy": "",
+    "lastReviewed": ""
+  },
   "blocks": {
     "map": "pending",
     "glossary": "pending",
@@ -31,6 +39,7 @@
     "activities": 0
   },
   "artifacts": {
+    "decision_brief": "ramp/decision-brief.md",
     "plan": "ramp/plan.md",
     "sources": "ramp/sources.jsonl",
     "sources_md": "ramp/sources.md",

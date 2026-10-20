@@ -117,22 +117,32 @@ def main() -> int:
         r = run("init_ramp.py", "--industry", "测试", "--customer", "客户", "--persona", "技术", "--deadline", "2026-10-25", "--out", str(fresh))
         check("init fresh", r.returncode == 0, r.stdout + r.stderr)
 
-        expected = {"plan.md", "state.json", "sources.jsonl", "sources.md", "value-chain.md", "value-chain.mmd",
+        expected = {"decision-brief.md", "plan.md", "state.json", "sources.jsonl", "sources.md",
                     "chain.md", "chain.mmd", "domains.md", "activities.md", "glossary.md",
-                    "flow.md", "flow.mmd", "verification-list.md", "corrections.md", "open-questions.md",
-                    "brief.md", "readiness.md", "drill-scorecard.md", "calibration-log.md",
-                    "process-metrics.md", "opportunities.md", "business-case.md"}
+                    "verification-list.md", "corrections.md", "brief.md"}
         check("init generates required files", expected <= {p.name for p in fresh.iterdir()})
+
+        check("minimal layout has decision-brief", (fresh / "decision-brief.md").exists())
+        state = json.loads((fresh / "state.json").read_text(encoding="utf-8"))
+        check("minimal state mode/layout", state.get("mode") == "explore" and state.get("layout") == "minimal")
 
         r = run("validate_artifacts.py", "--root", str(fresh))
         check("fresh validate exit 0 (warnings ok)", r.returncode == 0, r.stdout + r.stderr)
+
+        r = run("next_steps.py", "--root", str(fresh))
+        check("next_steps prints actions", r.returncode == 0 and "下一步" in r.stdout, r.stdout + r.stderr)
+
+        r = run("calc_process.py", "--minutes", "12", "--freq", "200", "--error-rate", "0.03",
+                "--cost-per-error", "50", "--hourly-rate", "60", "--realization", "0.4",
+                "--build-cost", "200000", "--run-cost-per-day", "200")
+        check("calc net ROI", r.returncode == 0 and "20,000.00" in r.stdout, r.stdout + r.stderr)
 
         r = run("readiness.py", "--root", str(fresh), "--set", "structure=4", "--set", "language=4",
                 "--set", "players=4", "--set", "decision=4", "--set", "dialogue=4", "--check")
         check("fresh readiness fails evidence gate", r.returncode == 1, r.stdout + r.stderr)
 
         full = tmp / "complete"
-        r = run("init_ramp.py", "--industry", "测试", "--out", str(full))
+        r = run("init_ramp.py", "--industry", "测试", "--out", str(full), "--full")
         build_complete(full)
         r = run("render_sources.py", "--root", str(full))
         check("render sources.md", r.returncode == 0 and "S01" in (full / "sources.md").read_text(encoding="utf-8"), r.stdout + r.stderr)
@@ -143,6 +153,15 @@ def main() -> int:
 
         r = run("validate_artifacts.py", "--root", str(full), "--strict")
         check("complete fixture strict validate PASS", r.returncode == 0, r.stdout + r.stderr)
+
+        r = run("readiness.py", "--root", str(full), "--client", "--check", "--no-write")
+        check("client-ready gate rejects explore fixture", r.returncode == 1 and "client" in r.stdout, r.stdout + r.stderr)
+
+        r = run("consistency.py", "--root", str(full), "--strict")
+        check("consistency passes complete fixture", r.returncode == 0, r.stdout + r.stderr)
+
+        r = run("check_sources.py", "--root", str(full), "--no-network")
+        check("source check offline passes", r.returncode == 0, r.stdout + r.stderr)
 
         with (full / "value-chain.md").open("a", encoding="utf-8") as fh:
             fh.write("\n合并引用 [S01/S02] 与 [S03、S04]。\n")

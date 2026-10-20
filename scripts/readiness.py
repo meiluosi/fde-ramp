@@ -46,6 +46,7 @@ def main() -> int:
     parser.add_argument("--set", action="append", default=[], metavar="DIM=SCORE")
     parser.add_argument("--check", action="store_true", help="exit 1 when not ready")
     parser.add_argument("--no-write", action="store_true", help="do not update state.json")
+    parser.add_argument("--client", action="store_true", help="require client-ready evidence (real interviews, verified terms, provenance)")
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
@@ -97,13 +98,36 @@ def main() -> int:
     chain_text = (root / "chain.md").read_text(encoding="utf-8") if (root / "chain.md").exists() else ""
     domains_text = (root / "domains.md").read_text(encoding="utf-8") if (root / "domains.md").exists() else ""
     activities_text = (root / "activities.md").read_text(encoding="utf-8") if (root / "activities.md").exists() else ""
-    terms, _ = glossary_count(glossary_text)
+    terms, status_counts = glossary_count(glossary_text)
     v_items = verification_count(verification_text)
     corrections = correction_count(corrections_text)
     players, relations = chain_counts(chain_text)
     d_count = domains_count(domains_text)
     a_count = activities_count(activities_text)
     negate_done = (state.get("blocks") or {}).get("negate") == "done"
+
+    # ---- client-ready checks (opt-in) ----
+    mode = state.get("mode", "explore")
+    decision_text = (root / "decision-brief.md").read_text(encoding="utf-8") if (root / "decision-brief.md").exists() else ""
+    verified_terms = status_counts.get("verified", 0)
+    tiers = {}
+    for row in sources:
+        tier = str(row.get("tier", "")).upper()
+        tiers[tier] = tiers.get(tier, 0) + 1
+    ab = tiers.get("A", 0) + tiers.get("B", 0)
+    ab_share = ab / len(sources) if sources else 0
+    simulated = any(marker in corrections_text for marker in ("模拟", "虚构"))
+    provenance = state.get("provenance") or {}
+    client_checks = [
+        ("state.mode == 'client-ready'", mode == "client-ready"),
+        ("decision-brief 已填", "决策" in decision_text and "拍板人" in decision_text and "{{" not in decision_text),
+        ("修正记录非模拟/虚构", not simulated),
+        ("verified 术语 ≥3", verified_terms >= 3),
+        ("A/B 级来源 ≥5 且占比 ≥50%", ab >= 5 and ab_share >= 0.5),
+        ("provenance.evidence == 'customer'", provenance.get("evidence") == "customer"),
+        ("provenance.reviewedBy 非空", bool(str(provenance.get("reviewedBy", "")).strip())),
+    ]
+    client_ok = all(ok for _, ok in client_checks)
 
     checks = [
         ("Block 4 修正 ≥5", corrections, 5),
@@ -127,9 +151,13 @@ def main() -> int:
     for label, value, need in checks:
         print(f"  {label}: {value}" + ("" if value >= need else f"  (need >= {need})"))
     print(f"  state.blocks.negate == 'done': {negate_done}")
+    if args.client:
+        print("client-ready:")
+        for label, ok in client_checks:
+            print(f"  {'✅' if ok else '❌'} {label}")
 
     dims_ok = lowest >= 2 and avg >= 3 and scores["structure"] >= 3 and scores["language"] >= 3
-    gate = dims_ok and evidence_ok
+    gate = dims_ok and evidence_ok and (client_ok if args.client else True)
 
     print()
     print("target: all five dimensions >= 3")
@@ -151,6 +179,10 @@ def main() -> int:
         for label, value, need in checks:
             if value < need:
                 print(f"  missing: {label} is {value} (need >={need})")
+        if args.client:
+            for label, ok in client_checks:
+                if not ok:
+                    print(f"  client missing: {label}")
 
     counts = state.setdefault("counts", {})
     counts.update(

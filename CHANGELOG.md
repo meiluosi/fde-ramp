@@ -4,6 +4,27 @@
 
 - 文档：README 增加 FDE Skill 系列导航与跨 Skill 编号约定；无代码改动。
 
+## v1.0.0 · 2026-10-20
+
+收敛版本：不追求更多文档，先把可信、收敛、交付做扎实。
+
+### P0
+- 可信度分层：`state.mode`（explore/client-ready）+ `state.provenance`；`readiness --client --check` 检查真实访谈、≥3 verified 术语、A/B 来源占比、decision-brief、provenance。
+- 第 0 步：新增 `decision-brief.md`（决策、拍板人、成功标准、错误代价、什么证据会推翻判断、干系人与采用）。
+- 最小路径：`init_ramp.py` 默认生成 13 文件；`--full` 才生成 24 文件旧布局；`validate_artifacts.py` 按 `state.layout` 识别。
+- 新增 `scripts/next_steps.py`：输出下一步最该做的 3 件事。
+
+### P1
+- `opportunities.md` 增加方案匹配、试点计划、净 ROI；`calc_process.py` 支持 `--realization/--build-cost/--run-cost-per-day`。
+- `decision-brief.md` 加干系人与采用；`references/opportunity-analysis.md` 加 AI 适配矩阵/方案匹配/试点/净 ROI。
+- `references/map-and-negate.md` 加按角色访谈工具包、追问句式、记录与同意。
+
+### P2
+- 新增 `scripts/check_sources.py`（URL 可达 + 新鲜度）、`scripts/consistency.py`（跨文件一致性）。
+- README 增加最小/完整布局、交接契约；`readiness-rubric`/`evidence`/`method` 同步 provenance 与两种模式。
+- 示例全部标 `mode: explore` 并补 `decision-brief.md`；示例不会通过 client gate，这是刻意设计。
+- selftest 30 项、CI 仍跑 strict/readiness。
+
 ## v0.9.5 · 2026-10-20
 
 - M3 客户端面板：`plugin/client/index.js` + `client/bundle.js`，侧栏「算账面板」→ 全屏 overlay；显示四数字表、成本卡片、机会象限、第一项目。
