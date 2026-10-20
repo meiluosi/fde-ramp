@@ -100,6 +100,6 @@ fde-ramp（本 skill）    → 四步编排 + 术语校准 + 流程图 + 被否�
 | `ramp_flow` | 第 3 步 | 地图 + 访谈 | `business.md` + `verification-list.md` |
 | `ramp_verify` | 第 3/4 步 | 待验证项 | 更新清单与状态 |
 | `ramp_brief` | 收尾 | 对象/目标 | `brief.md` |
-| `ramp_score` | 收尾 | 产物 | `readiness.md` |
+| `ramp_score` | 收尾 | 产物 | `state.json` + readiness 输出 |
 
 详见 `plugin/roadmap.md`。

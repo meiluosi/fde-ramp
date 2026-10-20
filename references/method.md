@@ -154,7 +154,7 @@ AI 可以准备图、生成问题、整理记录，但不能替代你去被否�
 4. **四维打分**：业务价值、可行性、数据可得性、政治阻力；数据/政治红灯先解决；
 5. **第一个项目**：选第一象限里最靠右的（最容易落地），不是最靠上的。
 
-完整方法、问法和算例见 `references/opportunity-analysis.md`；模板是 `templates/process-metrics.md`、`templates/opportunities.md`、`templates/business-case.md`；算账用 `scripts/calc_process.py`。
+完整方法、问法和算例见 `references/opportunity-analysis.md`；模板是 `templates/process-metrics.md`、`templates/opportunities.md`；算账用 `scripts/calc_process.py`。
 
 **核心**：不靠观点，靠客户自己的数字。
 

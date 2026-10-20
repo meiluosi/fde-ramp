@@ -34,7 +34,7 @@
 
 - **explore（默认）**：先跑通、先找缺口；允许公开源 + 模拟访谈，用于内部分析。
 - **client-ready（对外）**：必须真实访谈、≥3 个 `verified` 术语、provenance 标 `customer`；`readiness --client --check` 会拦住模拟内容。
-- **compact（默认）**：8 个文件，先跑完第 0–4 步；**full**：`init_ramp.py --full` 仅用于历史示例/兼容旧布局。
+- **compact**：8 个文件，先跑完第 0–4 步；方案模式加 `--analysis`。
 - 对外前把 `state.json` 的 `mode` 改成 `client-ready`，并填好 `provenance`。
 
 ### 可选第 5 步：方案模式（算账 + 找机会）
@@ -77,7 +77,7 @@ ln -s ~/Documents/GitHub/fde-ramp ~/.dsh/skills/fde-ramp
 cd ~/Documents/GitHub/fde-ramp
 python3 scripts/init_ramp.py --industry "煤层气" --customer "某公司" \
     --persona "技术负责人" --deadline 2026-10-25
-# 默认 compact 8 文件；方案模式加 --analysis；历史旧布局才加 --full
+# 默认 compact 8 文件；方案模式加 --analysis
 python3 scripts/render_sources.py --root ramp   # 生成 sources.md（人看的来源清单）
 python3 scripts/next_steps.py --root ramp      # 下一步最该做的 3 件事
 python3 scripts/validate_artifacts.py --root ramp
@@ -114,7 +114,7 @@ fde-ramp/
   templates/                   # 空模板（AI 填）
     decision-brief.md          # 第 0 步：决策、拍板人、成功标准、干系人
   scripts/
-    init_ramp.py               # 生成 ramp/ 工作区（默认 compact 8 文件；--analysis/--full 可选）
+    init_ramp.py               # 生成 ramp/ 工作区（compact 8 文件；--analysis 可选）
     render_sources.py          # 从 sources.jsonl 生成人看的 sources.md
     import_industry_map.py     # 把 dsh-industry-research 的 chain.json 转成 ramp 种子
     import_industry_track.py   # 把 timeline.jsonl 转成政策/动态草稿
@@ -191,12 +191,12 @@ fde-ramp/
 - [`examples/coalbed-methane-run/`](examples/coalbed-methane-run/README.md)：煤层气，31 条来源、78 个术语、36 行活动表；
 - [`examples/web-novel-run/`](examples/web-novel-run/README.md)：网络文学，34 条来源、77 个术语、25 行活动表。
 
-两个都是从 `init_ramp.py --full` 生成、走完四步、通过 `validate_artifacts.py --strict` 和 `readiness.py --check` 的完整 `ramp/` 示例。都含 5 处**模拟访谈**修正（已标注是虚构示例，只演示记录格式）。它们都是 `mode: explore`，不会通过 `--client` 门禁——这是刻意设计。
+两个都是从 `init_ramp.py` 生成、走完四步、通过 `validate_artifacts.py --strict` 和 `readiness.py --check` 的 compact `ramp/` 示例。都含 5 处**模拟访谈**修正（已标注是虚构示例，只演示记录格式）。它们都是 `mode: explore`，不会通过 `--client` 门禁——这是刻意设计。
 
 ## 最小布局 vs 完整布局
 
 - **compact（默认）**：8 个文件——decision-brief、chain、glossary、business、verification-list、brief、sources.jsonl、state.json；
-- **full（`--full`）**：24 个文件，仅用于历史示例/兼容；
+- **方案模式**：加 `--analysis` 生成 `process-metrics.md` / `opportunities.md`；其他旧文件不再生成。
 - 两个布局都通过 `validate_artifacts.py`（state.layout 自动识别）；
 - 对外前先 `next_steps.py` 看缺口，再 `readiness --client --check`。
 
@@ -229,7 +229,7 @@ fde-ramp/
 
 ## 当前状态
 
-- ✅ **v1.1.1（当前）**：默认 compact 8 文件（合域/流程/活动、合待验证/修正/开放问题、去掉 plan/独立 mmd）；插件活动工具兼容 compact；旧版 full 仅兼容。
+- ✅ **v1.2.0（当前）**：旧版 full 模板与示例已物理迁移/删除；默认且只生成 compact 8 文件；插件活动工具兼容 business.md。
 - ⏭ **下一步**：用真实客户跑一次 explore → 访谈 → client-ready；收集哪些字段真正被用、哪些可以再删。
 
 ## 已知限制

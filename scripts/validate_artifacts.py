@@ -14,30 +14,6 @@ import re
 import sys
 from pathlib import Path
 
-FULL_REQUIRED = [
-    "plan.md",
-    "decision-brief.md",
-    "state.json",
-    "sources.jsonl",
-    "sources.md",
-    "value-chain.md",
-    "value-chain.mmd",
-    "chain.md",
-    "chain.mmd",
-    "domains.md",
-    "activities.md",
-    "glossary.md",
-    "flow.md",
-    "flow.mmd",
-    "verification-list.md",
-    "corrections.md",
-    "open-questions.md",
-    "brief.md",
-    "readiness.md",
-    "drill-scorecard.md",
-    "calibration-log.md",
-]
-
 COMPACT_REQUIRED = [
     "state.json",
     "sources.jsonl",
@@ -281,10 +257,8 @@ def main() -> int:
         print(f"ERROR: state.json: invalid or missing ({exc})")
         return 1
 
-    layout = state.get("layout")
-    if layout not in {"compact", "full"}:
-        layout = "full" if (root / "value-chain.md").exists() and (root / "plan.md").exists() else "compact"
-    required = FULL_REQUIRED if layout == "full" else COMPACT_REQUIRED
+    layout = state.get("layout", "compact")
+    required = COMPACT_REQUIRED
     for name in required:
         if not (root / name).exists():
             errors.append(f"missing required file: {name}")
@@ -333,31 +307,19 @@ def main() -> int:
     if v_items < 5:
         warnings.append(f"verification-list: only {v_items} filled items (target >=5)")
 
-    flow_path = root / "flow.md"
+    flow_path = root / "business.md"
     q = 0
     if flow_path.exists():
         q = flow_guess_count(flow_path.read_text(encoding="utf-8"))
         if q < 5:
-            warnings.append(f"flow: only {q} guessed node rows '❓' (target >=5)")
+            warnings.append(f"flow/business: only {q} guessed node rows '❓' (target >=5)")
 
-    corrections_path = root / "corrections.md"
-    if corrections_path.exists():
-        corrections = corrections_path.read_text(encoding="utf-8")
-    elif (root / "verification-list.md").exists():
-        corrections = (root / "verification-list.md").read_text(encoding="utf-8")
-    else:
-        corrections = ""
+    corrections = (root / "verification-list.md").read_text(encoding="utf-8") if (root / "verification-list.md").exists() else ""
     corr = correction_count(corrections)
 
     business_text = (root / "business.md").read_text(encoding="utf-8") if (root / "business.md").exists() else ""
-    if layout == "full":
-        domains = (root / "domains.md").read_text(encoding="utf-8") if (root / "domains.md").exists() else ""
-        activities = (root / "activities.md").read_text(encoding="utf-8") if (root / "activities.md").exists() else ""
-    else:
-        domains = business_text
-        activities = business_text
-    d_count = domains_count(domains)
-    a_count = activities_count(activities)
+    d_count = domains_count(business_text)
+    a_count = activities_count(business_text)
     chain = (root / "chain.md").read_text(encoding="utf-8")
     p_count, r_count = chain_counts(chain)
     if p_count < 10:
@@ -369,10 +331,10 @@ def main() -> int:
     if a_count < 15:
         warnings.append(f"activities: only {a_count} filled activity rows (target >=15)")
     if corr < 5:
-        warnings.append(f"corrections: only {corr} filled corrections (Block 4 target >=5)")
+        warnings.append(f"corrections: only {corr} filled corrections in verification-list.md (target >=5)")
 
     if (state.get("blocks") or {}).get("negate") == "done" and corr < 5:
-        warnings.append("state.blocks.negate=done but corrections.md has <5 filled corrections")
+        warnings.append("state.blocks.negate=done but verification-list.md has <5 filled corrections")
 
     counts = state.get("counts") or {}
     if counts.get("sources") != len(sources):
@@ -384,7 +346,7 @@ def main() -> int:
             f"state.counts.verification_items={counts.get('verification_items')} but list has {v_items}"
         )
     if counts.get("corrections") != corr:
-        warnings.append(f"state.counts.corrections={counts.get('corrections')} but corrections.md has {corr}")
+        warnings.append(f"state.counts.corrections={counts.get('corrections')} but verification-list.md has {corr}")
     for key, value in (("players", p_count), ("relations", r_count), ("domains", d_count), ("activities", a_count)):
         if counts.get(key) != value:
             warnings.append(f"state.counts.{key}={counts.get(key)} but files have {value}")

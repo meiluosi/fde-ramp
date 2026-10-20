@@ -4,6 +4,14 @@
 
 - 文档：README 增加 FDE Skill 系列导航与跨 Skill 编号约定；无代码改动。
 
+## v1.2.0 · 2026-10-20
+
+- 物理收敛：删除旧版 full 模板与 24 文件生成路径；`init_ramp.py --full` 移除，只保留 compact 8 文件 + `--analysis` 两个可选文件。
+- 两个历史示例 migrate 到 compact：`decision-brief`、`chain`、`glossary`、`business`、`verification-list`、`brief`、`sources.jsonl`、`state.json`（另有按需生成的 `sources.md`）；旧 `plan/value-chain/domains/flow/activities/corrections/open-questions/readiness/drill/calibration` 已从示例删除。
+- 合并内容：chain 吸收 value-chain；business 吸收 domains/flow/activities；verification-list 吸收 corrections/open-questions。
+- 脚本改为 compact-only（validator/readiness/next_steps/consistency），selftest fixture 同步；插件活动工具回退 business。
+- examples strict/readiness 仍通过；selftest 30 项。
+
 ## v1.1.1 · 2026-10-20
 
 - 插件 `ramp_activities` / 写工具在 compact 布局下自动回退到 `business.md`（不再依赖已删除的 `activities.md`）；plugin 版本 0.4.1。

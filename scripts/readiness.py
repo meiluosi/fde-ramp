@@ -93,18 +93,12 @@ def main() -> int:
         else ""
     )
     corrections_text = (
-        (root / "corrections.md").read_text(encoding="utf-8") if (root / "corrections.md").exists()
-        else ((root / "verification-list.md").read_text(encoding="utf-8") if (root / "verification-list.md").exists() else "")
+        (root / "verification-list.md").read_text(encoding="utf-8") if (root / "verification-list.md").exists() else ""
     )
     chain_text = (root / "chain.md").read_text(encoding="utf-8") if (root / "chain.md").exists() else ""
-    state_layout = state.get("layout", "compact")
     business_text = (root / "business.md").read_text(encoding="utf-8") if (root / "business.md").exists() else ""
-    if state_layout == "full":
-        domains_text = (root / "domains.md").read_text(encoding="utf-8") if (root / "domains.md").exists() else ""
-        activities_text = (root / "activities.md").read_text(encoding="utf-8") if (root / "activities.md").exists() else ""
-    else:
-        domains_text = business_text
-        activities_text = business_text
+    domains_text = business_text
+    activities_text = business_text
     terms, status_counts = glossary_count(glossary_text)
     v_items = verification_count(verification_text)
     corrections = correction_count(corrections_text)
@@ -137,7 +131,7 @@ def main() -> int:
     client_ok = all(ok for _, ok in client_checks)
 
     checks = [
-        ("Block 4 修正 ≥5", corrections, 5),
+        ("修正记录 ≥5", corrections, 5),
         ("来源 ≥8", len(sources), 8),
         ("术语 ≥20", terms, 20),
         ("待验证 ≥5", v_items, 5),
@@ -182,7 +176,7 @@ def main() -> int:
         if not negate_done:
             print("  missing: Block 4 not marked done (state.blocks.negate != 'done')")
         if corrections < 5:
-            print(f"  missing: only {corrections} filled corrections in corrections.md (need >=5)")
+            print(f"  missing: only {corrections} filled corrections in verification-list.md (need >=5)")
         for label, value, need in checks:
             if value < need:
                 print(f"  missing: {label} is {value} (need >={need})")

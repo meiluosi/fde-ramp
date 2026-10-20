@@ -50,7 +50,7 @@ def build_complete(root: Path) -> None:
             "published": "2026-01-01",
             "accessed": "2026-10-18",
             "tier": "A" if i <= 4 else "C",
-            "usedFor": ["value-chain"],
+            "usedFor": ["chain"],
         }
         for i in range(1, 9)
     ]
@@ -64,22 +64,6 @@ def build_complete(root: Path) -> None:
         rows.append(f"| {i} | 术语{i} | term{i} | 一句人话 | 行业用法 | 近邻{i} | {status} | S{i % 8 + 1:02d} |")
     (root / "glossary.md").write_text("# 术语\n\n" + "\n".join(rows) + "\n", encoding="utf-8")
 
-    v = ["| # | 我猜的是什么 | 为什么不确定 | 风险 | 成本 | 找谁 | 怎么问 | 状态 |", "|---|---|---|---|---|---|---|---|"]
-    for i in range(1, 6):
-        v.append(f"| {i} | 我猜是 X{i} | 无公开源 | 高 | 低 | 站长 | 「我画了…您帮我改」 | open |")
-    (root / "verification-list.md").write_text("# 待验证\n\n" + "\n".join(v) + "\n", encoding="utf-8")
-
-    f = ["# 流程", "", "| 节点 | 我理解的是 | 信心 | 来源 | 备注 |", "|---|---|---|---|---|"]
-    for i in range(1, 6):
-        f.append(f"| 节点{i} | 猜测 | ❓ | — | — |")
-    f.append("| 节点6 | 有来源 | ✅ | S01 | — |")
-    (root / "flow.md").write_text("\n".join(f) + "\n", encoding="utf-8")
-
-    c = ["# 修正记录"]
-    for i in range(1, 6):
-        c += ["", f"## 修正 {i}", "", f"- 我原以为：A{i}", f"- 实际：B{i}", "- 差异原因：C", "- 影响：D", "- 来源：访谈", ""]
-    (root / "corrections.md").write_text("\n".join(c), encoding="utf-8")
-
     chain = [
         "# 链路", "", "## 1. 分段", "| # | 分段 | 做什么 |", "|---|---|---|", "| 1 | 上游 | 生产 |", "",
         "## 2. 每段玩家", "", "| 玩家 | 角色 | 现状 | 近12月动作 | 未来规划 | 信心 | 来源 |",
@@ -92,21 +76,42 @@ def build_complete(root: Path) -> None:
         chain.append(f"| 玩家{i} | 供应 | 玩家{i + 1} | 合同 [S01] | ✅ | S01 |")
     (root / "chain.md").write_text("\n".join(chain) + "\n", encoding="utf-8")
 
-    domains = ["# 业务域", "", "| # | 业务域 | 目标 | 负责 | 流程 | 接口 | 痛点 | 信心 | 来源 |",
+    f = ["| 节点 | 我理解的是 | 信心 | 来源 | 备注 |", "|---|---|---|---|---|"]
+    for i in range(1, 6):
+        f.append(f"| 节点{i} | 猜测 | ❓ | — | — |")
+    f.append("| 节点6 | 有来源 | ✅ | S01 | — |")
+
+    domains = ["| # | 业务域 | 目标 | 负责 | 流程 | 接口 | 痛点 | 信心 | 来源 |",
                "|---|---|---|---|---|---|---|---|---|"]
     for i in range(1, 4):
         domains.append(f"| {i} | 域{i} | 目标 | 部门 | 流程 | 接口 | 痛点 | ✅ | S01 |")
-    (root / "domains.md").write_text("\n".join(domains) + "\n", encoding="utf-8")
 
-    activities = ["# 活动", "",
-                  "| 业务域 | 流程 | 环节/活动 | 做什么 | 谁做 | 影响谁 | 工具 | 背景 | 输入→输出 | 信心 | 来源 |",
+    activities = ["| 业务域 | 流程 | 环节/活动 | 做什么 | 谁做 | 影响谁 | 工具 | 背景 | 输入→输出 | 信心 | 来源 |",
                   "|---|---|---|---|---|---|---|---|---|---|---|"]
     for i in range(1, 16):
         activities.append(f"| 域1 | 流程1 | 活动{i} | 做{i} | 岗位 | 下游 | 系统❓ | 背景 | A→B | ✅ | S01 |")
-    (root / "activities.md").write_text("\n".join(activities) + "\n", encoding="utf-8")
+    (root / "business.md").write_text(
+        "# 业务域 / 流程 / 活动\n\n## 1. 业务域\n\n" + "\n".join(domains)
+        + "\n\n## 2. 流程\n\n" + "\n".join(f)
+        + "\n\n## 3. 活动表\n\n" + "\n".join(activities) + "\n",
+        encoding="utf-8",
+    )
+
+    v = ["| # | 我猜的是什么 | 为什么不确定 | 风险 | 成本 | 找谁 | 怎么问 | 状态 |", "|---|---|---|---|---|---|---|---|"]
+    for i in range(1, 6):
+        v.append(f"| {i} | 我猜是 X{i} | 无公开源 | 高 | 低 | 站长 | 「我画了…您帮我改」 | open |")
+    c = ["## 2. 修正记录", ""]
+    for i in range(1, 6):
+        c += [f"## 修正 {i}", "", f"- 我原以为：A{i}", f"- 实际：B{i}", "- 差异原因：C", "- 影响：D", "- 来源：访谈", ""]
+    (root / "verification-list.md").write_text(
+        "# 待验证 / 修正\n\n## 1. 待验证清单\n\n" + "\n".join(v) + "\n\n" + "\n".join(c),
+        encoding="utf-8",
+    )
 
     state = json.loads((root / "state.json").read_text(encoding="utf-8"))
     state["blocks"]["negate"] = "done"
+    state["layout"] = "compact"
+    state["mode"] = "explore"
     (root / "state.json").write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
@@ -142,7 +147,7 @@ def main() -> int:
         check("fresh readiness fails evidence gate", r.returncode == 1, r.stdout + r.stderr)
 
         full = tmp / "complete"
-        r = run("init_ramp.py", "--industry", "测试", "--out", str(full), "--full")
+        r = run("init_ramp.py", "--industry", "测试", "--out", str(full))
         build_complete(full)
         r = run("render_sources.py", "--root", str(full))
         check("render sources.md", r.returncode == 0 and "S01" in (full / "sources.md").read_text(encoding="utf-8"), r.stdout + r.stderr)
@@ -163,12 +168,12 @@ def main() -> int:
         r = run("check_sources.py", "--root", str(full), "--no-network")
         check("source check offline passes", r.returncode == 0, r.stdout + r.stderr)
 
-        with (full / "value-chain.md").open("a", encoding="utf-8") as fh:
+        with (full / "chain.md").open("a", encoding="utf-8") as fh:
             fh.write("\n合并引用 [S01/S02] 与 [S03、S04]。\n")
         r = run("validate_artifacts.py", "--root", str(full))
         check("merged source refs [S01/S02] parse", r.returncode == 0, r.stdout + r.stderr)
 
-        with (full / "value-chain.md").open("a", encoding="utf-8") as fh:
+        with (full / "chain.md").open("a", encoding="utf-8") as fh:
             fh.write("\n未知引用 [S99]。\n")
         r = run("validate_artifacts.py", "--root", str(full))
         check("unknown source ref fails", r.returncode == 1, r.stdout + r.stderr)
@@ -281,8 +286,8 @@ def main() -> int:
         from validate_artifacts import activities_count, chain_counts, domains_count  # noqa: E402
 
         check("chain counts 10 players / 5 relations", chain_counts((full / "chain.md").read_text(encoding="utf-8")) == (10, 5))
-        check("domains count", domains_count((full / "domains.md").read_text(encoding="utf-8")) == 3)
-        check("activities count", activities_count((full / "activities.md").read_text(encoding="utf-8")) == 15)
+        check("domains count", domains_count((full / "business.md").read_text(encoding="utf-8")) == 3)
+        check("activities count", activities_count((full / "business.md").read_text(encoding="utf-8")) == 15)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

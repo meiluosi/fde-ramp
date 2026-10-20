@@ -118,7 +118,7 @@ quadrantChart
 4. 给第一项目的预期收益、前提、风险；
 5. 明确下一步要客户提供什么数据/谁配合。
 
-一页纸模板见 `templates/business-case.md`；详细表见 `templates/process-metrics.md` 和 `templates/opportunities.md`。
+一页纸模板已并入 `templates/opportunities.md` 的「净 ROI / 试点」节；详细表见 `templates/process-metrics.md` 和 `templates/opportunities.md`。
 
 ## 8. 常见坑
 

@@ -2,7 +2,7 @@
 """Merge m15_compose drafts into an existing ramp workspace.
 
 Copies imported drafts, appends their sources to sources.jsonl with fresh ids,
-and adds a marked section to chain.md. It never overwrites chain.md/activities.md.
+and adds a marked section to chain.md. It never overwrites chain.md/business.md.
 
 Usage:
   python3 scripts/merge_imports.py --ramp ramp --imports ramp-m15

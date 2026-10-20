@@ -2,7 +2,7 @@
 """Cross-file consistency checks for a ramp workspace.
 
 Checks:
-  - every activity domain exists in domains.md;
+  - every activity domain exists in business.md;
   - every relation endpoint exists in chain.md players;
   - duplicate player/domain names;
   - state.counts vs files (a lightweight duplicate of validator warnings).
@@ -70,13 +70,9 @@ def main() -> int:
 
     issues: list[str] = []
     plays, rels = chain_counts(read("chain.md"))
-    try:
-        layout = json.loads(read("state.json")).get("layout", "compact")
-    except Exception:
-        layout = "compact"
     business = read("business.md")
-    domain_text = read("domains.md") if layout == "full" else (business or read("domains.md"))
-    activity_text = read("activities.md") if layout == "full" else (business or read("activities.md"))
+    domain_text = business
+    activity_text = business
     domains_h, domain_rows = table_with(domain_text, "业务域")
     domain_names = {r[1] for r in domain_rows if len(r) > 1 and r[1]} if domains_h else set()
     domain_codes = {r[0] for r in domain_rows if r and r[0] and r[0] != "#"} if domains_h else set()
@@ -85,7 +81,7 @@ def main() -> int:
         allowed = domain_names | domain_codes
         for row in activity_rows:
             if len(row) > 0 and row[0] and row[0] not in allowed:
-                issues.append(f"activity domain not in domains.md: {row[0]!r}")
+                issues.append(f"activity domain not in business.md: {row[0]!r}")
     chain_h, player_rows = table_with(read("chain.md"), "玩家", "现状")
     # relation endpoints are intentionally descriptive in some packs, so only
     # duplicate-name checks are safe across industry packs.

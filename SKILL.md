@@ -310,7 +310,7 @@ python3 scripts/readiness.py --root ramp --client --check
 ```bash
 RAMP=~/.dsh/skills/fde-ramp
 
-# 1) 生成 ramp/ 工作区（默认 compact 8 文件；要方案模式加 --analysis；历史旧布局才 --full）
+# 1) 生成 ramp/ 工作区（默认 compact 8 文件；方案模式加 --analysis）
 python3 "$RAMP/scripts/init_ramp.py" --industry "煤层气" --customer "某公司" --persona "技术负责人" --deadline 2026-10-25
 
 # 2) 看下一步最该做的 3 件事

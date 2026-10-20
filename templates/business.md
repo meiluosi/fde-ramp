@@ -183,10 +183,9 @@ flowchart TD
 
 ## 与其它产物的关系
 
-- `domains.md`：域划分与接口
-- `flow.md`：每个域的流程
-- `verification-list.md`：从本表的 ❓/⚠️ 生成
-- `corrections.md`：访谈后把被改的行写进修正记录，并回填本表
+- 本文件三节：业务域、流程、活动表；
+- `verification-list.md`：从本表的 ❓/⚠️ 生成待验证；访谈修正也写在那里；
+- 回填：修正后直接改本文件对应行。
 
 ---
 

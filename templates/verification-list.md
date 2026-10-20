@@ -70,9 +70,9 @@
 ## 访谈后 30 分钟清单
 
 - [ ] 修正记录写完
-- [ ] `flow.md` 更新（❓ → ✅，标「来源：访谈 XX」）
+- [ ] `business.md` 的流程/活动行更新（❓ → ✅，标「来源：访谈 XX」）
 - [ ] `glossary.md` 更新（被纠正的术语）
-- [ ] `readiness.md` 重评
+- [ ] `readiness.py --check` 重跑（不再单独维护 readiness.md）
 - [ ] 下一次访谈问题写下
 
 ---
