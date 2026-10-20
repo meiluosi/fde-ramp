@@ -4,6 +4,11 @@
 
 - 文档：README 增加 FDE Skill 系列导航与跨 Skill 编号约定；无代码改动。
 
+## v1.1.1 · 2026-10-20
+
+- 插件 `ramp_activities` / 写工具在 compact 布局下自动回退到 `business.md`（不再依赖已删除的 `activities.md`）；plugin 版本 0.4.1。
+- README 状态同步。
+
 ## v1.1.0 · 2026-10-20
 
 - 进一步收敛：默认生成从 13 文件降到 **compact 8 文件**。

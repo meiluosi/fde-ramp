@@ -212,9 +212,10 @@ export function apply(ctx, config = {}) {
       async execute(args, exec) {
         const cwd = sessionCwd(exec)
         const root = resolve(cwd, args.root || settings.root)
-        const text = await readText(resolve(root, 'activities.md'))
+        let text = await readText(resolve(root, 'activities.md'))
+        if (text === undefined) text = await readText(resolve(root, 'business.md'))
         if (text === undefined) {
-          return { root, initialized: false, rows: 0, columns: 0, uncertain: 0, note: '没有 activities.md' }
+          return { root, initialized: false, rows: 0, columns: 0, uncertain: 0, note: '没有 activities.md / business.md' }
         }
         const stats = activityStats(text)
         return {
@@ -406,9 +407,10 @@ export function apply(ctx, config = {}) {
       async execute(args, exec) {
         const cwd = sessionCwd(exec)
         const root = resolve(cwd, args.root || settings.root)
-        const path = resolve(root, 'activities.md')
-        const text = await readText(path)
-        if (text === undefined) throw new Error(`没有 activities.md: ${path}`)
+        let path = resolve(root, 'activities.md')
+        let text = await readText(path)
+        if (text === undefined) { path = resolve(root, 'business.md'); text = await readText(path) }
+        if (text === undefined) throw new Error(`没有 activities.md / business.md: ${path}`)
         const result = updateActivities(text, args)
         await writeWithPolicy(ctx, exec, path, result.markdown)
         return {
@@ -535,9 +537,10 @@ export function apply(ctx, config = {}) {
         const root = resolve(cwd, args.root || settings.root)
         const updates = Array.isArray(args.updates) ? args.updates : []
         if (updates.length === 0) throw new Error('updates 不能为空')
-        const path = resolve(root, 'activities.md')
-        const text = await readText(path)
-        if (text === undefined) throw new Error(`没有 activities.md: ${path}`)
+        let path = resolve(root, 'activities.md')
+        let text = await readText(path)
+        if (text === undefined) { path = resolve(root, 'business.md'); text = await readText(path) }
+        if (text === undefined) throw new Error(`没有 activities.md / business.md: ${path}`)
         const result = updateActivitiesBatch(text, updates)
         const diff = diffLines(text, result.markdown)
         const dryRun = args.dryRun === true
