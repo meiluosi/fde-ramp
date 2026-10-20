@@ -38,19 +38,14 @@ FULL_REQUIRED = [
     "calibration-log.md",
 ]
 
-MINIMAL_REQUIRED = [
+COMPACT_REQUIRED = [
     "state.json",
     "sources.jsonl",
-    "sources.md",
     "decision-brief.md",
-    "plan.md",
     "chain.md",
-    "chain.mmd",
-    "domains.md",
-    "activities.md",
     "glossary.md",
+    "business.md",
     "verification-list.md",
-    "corrections.md",
     "brief.md",
 ]
 
@@ -287,9 +282,9 @@ def main() -> int:
         return 1
 
     layout = state.get("layout")
-    if layout not in {"minimal", "full"}:
-        layout = "full" if (root / "value-chain.md").exists() and (root / "plan.md").exists() else "minimal"
-    required = FULL_REQUIRED if layout == "full" else MINIMAL_REQUIRED
+    if layout not in {"compact", "full"}:
+        layout = "full" if (root / "value-chain.md").exists() and (root / "plan.md").exists() else "compact"
+    required = FULL_REQUIRED if layout == "full" else COMPACT_REQUIRED
     for name in required:
         if not (root / name).exists():
             errors.append(f"missing required file: {name}")
@@ -345,12 +340,23 @@ def main() -> int:
         if q < 5:
             warnings.append(f"flow: only {q} guessed node rows '❓' (target >=5)")
 
-    corrections = (root / "corrections.md").read_text(encoding="utf-8")
+    corrections_path = root / "corrections.md"
+    if corrections_path.exists():
+        corrections = corrections_path.read_text(encoding="utf-8")
+    elif (root / "verification-list.md").exists():
+        corrections = (root / "verification-list.md").read_text(encoding="utf-8")
+    else:
+        corrections = ""
     corr = correction_count(corrections)
 
-    domains = (root / "domains.md").read_text(encoding="utf-8")
+    business_text = (root / "business.md").read_text(encoding="utf-8") if (root / "business.md").exists() else ""
+    if layout == "full":
+        domains = (root / "domains.md").read_text(encoding="utf-8") if (root / "domains.md").exists() else ""
+        activities = (root / "activities.md").read_text(encoding="utf-8") if (root / "activities.md").exists() else ""
+    else:
+        domains = business_text
+        activities = business_text
     d_count = domains_count(domains)
-    activities = (root / "activities.md").read_text(encoding="utf-8")
     a_count = activities_count(activities)
     chain = (root / "chain.md").read_text(encoding="utf-8")
     p_count, r_count = chain_counts(chain)

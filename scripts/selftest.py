@@ -117,14 +117,14 @@ def main() -> int:
         r = run("init_ramp.py", "--industry", "测试", "--customer", "客户", "--persona", "技术", "--deadline", "2026-10-25", "--out", str(fresh))
         check("init fresh", r.returncode == 0, r.stdout + r.stderr)
 
-        expected = {"decision-brief.md", "plan.md", "state.json", "sources.jsonl", "sources.md",
-                    "chain.md", "chain.mmd", "domains.md", "activities.md", "glossary.md",
-                    "verification-list.md", "corrections.md", "brief.md"}
+        expected = {"decision-brief.md", "state.json", "sources.jsonl",
+                    "chain.md", "glossary.md", "business.md",
+                    "verification-list.md", "brief.md"}
         check("init generates required files", expected <= {p.name for p in fresh.iterdir()})
 
         check("minimal layout has decision-brief", (fresh / "decision-brief.md").exists())
         state = json.loads((fresh / "state.json").read_text(encoding="utf-8"))
-        check("minimal state mode/layout", state.get("mode") == "explore" and state.get("layout") == "minimal")
+        check("minimal state mode/layout", state.get("mode") == "explore" and state.get("layout") == "compact")
 
         r = run("validate_artifacts.py", "--root", str(fresh))
         check("fresh validate exit 0 (warnings ok)", r.returncode == 0, r.stdout + r.stderr)

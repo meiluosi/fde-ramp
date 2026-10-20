@@ -1,6 +1,6 @@
 ---
 name: fde-ramp
-description: 帮一个刚接触陌生行业的人，在见客户前快速搭起这个行业的基本盘：先写决策简报，再画行业地图、行话、业务域/流程/活动，拿图去让一线员工改；可选第 5 步算账找 AI 机会并做方案匹配/试点/净 ROI。支持 explore（公开源）和 client-ready（真实访谈）两种模式，默认 minimal 13 文件。适合 FDE / 售前 / 交付 / 顾问第一次做某个行业，或用户说「帮我快速搞懂 X 行业」「下周要见客户」「帮我准备一份行业 brief」「帮我找 AI 落地机会」。
+description: 帮一个刚接触陌生行业的人，在见客户前快速搭起这个行业的基本盘：先写决策简报，再画行业地图、行话、业务域/流程/活动，拿图去让一线员工改；可选第 5 步算账找 AI 机会并做方案匹配/试点/净 ROI。支持 explore（公开源）和 client-ready（真实访谈）两种模式，默认 compact 8 文件。适合 FDE / 售前 / 交付 / 顾问第一次做某个行业，或用户说「帮我快速搞懂 X 行业」「下周要见客户」「帮我准备一份行业 brief」「帮我找 AI 落地机会」。
 ---
 
 # 快速入门一个行业（FDE 用）
@@ -33,7 +33,7 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 
 - **explore（默认）**：公开源 + 模拟访谈可以跑通，只用于内部；示例永远是 explore；
 - **client-ready（对外）**：真实访谈、≥3 个 `verified` 术语、provenance 标 customer，`readiness --client --check` 才放行；
-- **minimal（默认 13 文件）**：先跑通第 0–4 步；**full（`--full`，24 文件）**：要完整旧布局/方案三件套时再用；
+- **compact（默认 8 文件）**：decision-brief、chain、glossary、business（域+流程+活动）、verification-list（待验证+修正+开放问题）、brief、sources.jsonl、state；**full** 仅历史兼容；
 - 入门模式（第 0–4 步）/ 方案模式（第 0–5 步），第 5 步是「算账 + 找最值得做的机会」。
 
 每填完一份，先给用户看 5 行摘要，不要一次倒全文。
@@ -90,7 +90,7 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 7. 没证据的股权/合作关系，标 ❓ 进待验证清单，**不要编**。
 8. 所有数字带来源编号 `[S01]`；没来源就写「待验证」。
 
-产出：`value-chain.md`、`chain.md`、`sources.jsonl`（图另存 `.mmd`）。
+产出：`chain.md`（链路 + 内嵌 mermaid）、`sources.jsonl`。
 
 验收：你能不看资料说出「这个行业靠什么赚钱、每一段有谁、谁和谁是什么关系」。
 
@@ -110,7 +110,7 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 4. 每个词补「最容易搞混的近邻词」，写成「A 不是 B，因为……」；写不出区别就标「不确定」。
 5. 从业者文章可以帮你找词，但**不能作为关键数字的唯一来源**；要标作者、日期，分清科普和软文。
 
-产出：`glossary.md`、`calibration-log.md`。
+产出：`glossary.md`。
 
 验收：随机抽 10 个词，你能用一句人话解释，并说清它和近邻词的区别；哪些词还没被客户确认，你心里有数。
 
@@ -140,7 +140,7 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 - 活动表至少 15 行；标 ❓/⚠️ 的行，就是第 4 步拿去让人改的靶子。
 - 把这些不确定的点整理成待验证清单，按「错了后果多严重 × 好不好验证」排序。
 
-产出：`domains.md`、`flow.md`、`activities.md`、`verification-list.md`。
+产出：`business.md`（业务域+流程+活动表）、`verification-list.md`。
 
 验收：≥3 个业务域；活动表 ≥15 行（自检门槛 ≥10），每行都有「谁做/影响谁/工具/业务背景」；至少 5 个明确的 ❓。
 
@@ -162,9 +162,9 @@ description: 帮一个刚接触陌生行业的人，在见客户前快速搭起�
 
 1. **不辩解**。被纠正时说「原来是这样」，不要说「可是资料上说……」。
 2. 每改一处，问一句「**为什么会这样**」。
-3. 记下改前/改后，回来写进 `corrections.md`。
+3. 记下改前/改后，回来写进 `verification-list.md` 的「修正记录」。
 4. 追问：还有谁会不同意这张图？有没有哪份文件能一锤定音？我下次还容易错在哪？
-5. 回来把改动写回 `chain.md` / `domains.md` / `flow.md` / `activities.md`；没解决的进 `verification-list.md`。
+5. 回来把改动写回 `chain.md` / `business.md`；没解决的进 `verification-list.md`。
 6. 如果装了 `dsh-scout`：先用它做公司主体核验/证据分级/访谈问题，再运行 `scripts/import_scout_case.py` 生成 `scout-import.md`，把未核实项并进 `verification-list.md`。见 `references/adapters.md`。
 7. 如果要做方案：**顺手把重点环节的四个数字问出来**——耗时、日频次、出错率、单次代价；再问清「这一步谁做、什么职级」，回去找 HR/财务要人力单价。问法见 `references/opportunity-analysis.md`。
 
@@ -274,11 +274,11 @@ python3 scripts/readiness.py --root ramp --client --check
 
 | 工具 | 能帮什么 | 没有怎么办 |
 |---|---|---|
-| `dsh-industry-research` | 产业链图、政策/新闻跟踪、公司卡 | 用本 skill 的 `value-chain.md` + `chain.md` + `web_search` |
+| `dsh-industry-research` | 产业链图、政策/新闻跟踪、公司卡 | 用本 skill 的 `chain.md` + `web_search` |
 | `dsh-scout` | 公司主体核验、证据分级、访谈问题 | 用 `sources.jsonl` 的 tier 手工分级 |
 | `dsh-kb` | 把客户给的材料沉淀成可检索知识库 | 文件路径写进 `sources.jsonl`，按需读 |
 | `material-audit` | 客户给了架构/流程/制度文档，先抽结构、找缺口 | 用本 skill 的流程模板手工抽 |
-| `gap-rehearsal` | 把「必须拍板」的问题做成决策演练 | 用 `open-questions.md` 自问自答 |
+| `gap-rehearsal` | 把「必须拍板」的问题做成决策演练 | 用 `verification-list.md` 的「开放问题」自问自答 |
 
 没有这些工具也能跑。具体接法（工具名、导出路径、导入脚本）见 `references/adapters.md`；三个插件都导出后，可以用一条命令生成导入草稿：`python3 scripts/m15_compose.py --imports imports --out-dir ramp`。
 
@@ -310,7 +310,7 @@ python3 scripts/readiness.py --root ramp --client --check
 ```bash
 RAMP=~/.dsh/skills/fde-ramp
 
-# 1) 生成 ramp/ 工作区（默认 minimal 13 文件；要完整旧布局加 --full）
+# 1) 生成 ramp/ 工作区（默认 compact 8 文件；要方案模式加 --analysis；历史旧布局才 --full）
 python3 "$RAMP/scripts/init_ramp.py" --industry "煤层气" --customer "某公司" --persona "技术负责人" --deadline 2026-10-25
 
 # 2) 看下一步最该做的 3 件事

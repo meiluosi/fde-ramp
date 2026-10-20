@@ -6,7 +6,7 @@
   "deadline": "{{DEADLINE}}",
   "started": "{{DATE}}",
   "mode": "explore",
-  "layout": "minimal",
+  "layout": "compact",
   "provenance": {
     "generatedBy": "ai",
     "evidence": "public",

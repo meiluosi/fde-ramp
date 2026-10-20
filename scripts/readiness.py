@@ -93,11 +93,18 @@ def main() -> int:
         else ""
     )
     corrections_text = (
-        (root / "corrections.md").read_text(encoding="utf-8") if (root / "corrections.md").exists() else ""
+        (root / "corrections.md").read_text(encoding="utf-8") if (root / "corrections.md").exists()
+        else ((root / "verification-list.md").read_text(encoding="utf-8") if (root / "verification-list.md").exists() else "")
     )
     chain_text = (root / "chain.md").read_text(encoding="utf-8") if (root / "chain.md").exists() else ""
-    domains_text = (root / "domains.md").read_text(encoding="utf-8") if (root / "domains.md").exists() else ""
-    activities_text = (root / "activities.md").read_text(encoding="utf-8") if (root / "activities.md").exists() else ""
+    state_layout = state.get("layout", "compact")
+    business_text = (root / "business.md").read_text(encoding="utf-8") if (root / "business.md").exists() else ""
+    if state_layout == "full":
+        domains_text = (root / "domains.md").read_text(encoding="utf-8") if (root / "domains.md").exists() else ""
+        activities_text = (root / "activities.md").read_text(encoding="utf-8") if (root / "activities.md").exists() else ""
+    else:
+        domains_text = business_text
+        activities_text = business_text
     terms, status_counts = glossary_count(glossary_text)
     v_items = verification_count(verification_text)
     corrections = correction_count(corrections_text)

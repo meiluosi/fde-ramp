@@ -38,16 +38,22 @@ def main() -> int:
         p = root / name
         return p.read_text(encoding="utf-8") if p.exists() else ""
 
+    mode = state.get("mode", "explore")
+    layout = state.get("layout", "compact")
     sources = load_sources_quiet(root / "sources.jsonl")
     terms, statuses = glossary_count(read("glossary.md"))
     v_items = verification_count(read("verification-list.md"))
-    corrections = correction_count(read("corrections.md"))
+    business = read("business.md")
+    correction_text = read("corrections.md") or read("verification-list.md")
+    corrections = correction_count(correction_text)
     players, relations = chain_counts(read("chain.md"))
-    domains = domains_count(read("domains.md"))
-    activities = activities_count(read("activities.md"))
+    if layout == "full":
+        domains = domains_count(read("domains.md"))
+        activities = activities_count(read("activities.md"))
+    else:
+        domains = domains_count(business)
+        activities = activities_count(business)
     decision = read("decision-brief.md")
-    mode = state.get("mode", "explore")
-    layout = state.get("layout", "minimal")
 
     actions: list[str] = []
     if not decision or "{{" in decision or "决策" not in decision:
@@ -71,7 +77,7 @@ def main() -> int:
 
     if mode == "client-ready":
         prov = state.get("provenance") or {}
-        if any(m in read("corrections.md") for m in ("模拟", "虚构")):
+        if any(m in correction_text for m in ("模拟", "虚构")):
             actions.append("client-ready 红灯：corrections.md 还有模拟/虚构标记；换成真实访谈。")
         if statuses.get("verified", 0) < 3:
             actions.append(f"client-ready：verified 术语只有 {statuses.get('verified', 0)} 个，至少 3 个。")

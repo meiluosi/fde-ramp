@@ -26,6 +26,7 @@ FILES = {
     "value-chain.mmd": "value-chain.mmd",
     "chain.md": "chain.md",
     "chain.mmd": "chain.mmd",
+    "business.md": "business.md",
     "domains.md": "domains.md",
     "activities.md": "activities.md",
     "glossary.md": "glossary.md",
@@ -44,10 +45,11 @@ FILES = {
 }
 
 MINIMAL = {
-    "decision-brief.md", "plan.md", "sources.md", "chain.md", "chain.mmd",
-    "domains.md", "activities.md", "glossary.md", "verification-list.md",
-    "corrections.md", "brief.md",
+    "decision-brief.md", "chain.md", "glossary.md", "business.md",
+    "verification-list.md", "brief.md",
 }
+
+ANALYSIS = {"process-metrics.md", "opportunities.md"}
 
 
 def render(text: str, values: dict[str, str]) -> str:
@@ -66,6 +68,7 @@ def main() -> int:
     parser.add_argument("--force", action="store_true", help="overwrite non-empty output dir")
     parser.add_argument("--mode", choices=["explore", "client-ready"], default="explore", help="readiness mode")
     parser.add_argument("--full", action="store_true", help="generate the full legacy set (24 files)")
+    parser.add_argument("--analysis", action="store_true", help="also generate process-metrics.md / opportunities.md")
     parser.add_argument("--minimal", action="store_true", help="generate the minimal set (default)")
     args = parser.parse_args()
 
@@ -83,7 +86,8 @@ def main() -> int:
         "DATE": dt.date.today().isoformat(),
     }
 
-    selected = FILES if args.full else {k: v for k, v in FILES.items() if Path(k).name in MINIMAL}
+    keep = MINIMAL | (ANALYSIS if args.analysis else set())
+    selected = FILES if args.full else {k: v for k, v in FILES.items() if Path(k).name in keep}
     for src_name, dst_name in selected.items():
         src = TEMPLATES / src_name
         if not src.exists():
@@ -100,11 +104,29 @@ def main() -> int:
     rendered["artifacts"] = {
         key: str(value).rsplit("/", 1)[-1] for key, value in (rendered.get("artifacts") or {}).items()
     }
+    rendered["mode"] = args.mode
+    rendered["layout"] = "full" if args.full else "compact"
+    if not args.full:
+        rendered["artifacts"] = {
+            "decision_brief": "decision-brief.md",
+            "chain": "chain.md",
+            "glossary": "glossary.md",
+            "business": "business.md",
+            "verification_list": "verification-list.md",
+            "brief": "brief.md",
+            "sources": "sources.jsonl",
+            "sources_md": "sources.md",
+        }
+        if args.analysis:
+            rendered["artifacts"].update({
+                "process_metrics": "process-metrics.md",
+                "opportunities": "opportunities.md",
+            })
     (out / "state.json").write_text(json.dumps(rendered, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(f"ramp workspace created: {out}")
-    print(f"layout: {'full' if args.full else 'minimal'}  mode: {args.mode}")
-    print("next: fill decision-brief.md, then chain.md / domains.md / activities.md")
+    print(f"layout: {'full' if args.full else 'compact'}  mode: {args.mode}  files: {len(selected) + 2}")
+    print("next: fill decision-brief.md, then chain.md / business.md / verification-list.md")
     print(f"  python3 {Path(__file__).with_name('next_steps.py')} --root {args.out}")
     print(f"  python3 {Path(__file__).with_name('validate_artifacts.py')} --root {args.out}")
     print(f"  python3 {Path(__file__).with_name('readiness.py')} --root {args.out}")

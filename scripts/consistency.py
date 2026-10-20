@@ -70,10 +70,17 @@ def main() -> int:
 
     issues: list[str] = []
     plays, rels = chain_counts(read("chain.md"))
-    domains_h, domain_rows = table_with(read("domains.md"), "业务域")
+    try:
+        layout = json.loads(read("state.json")).get("layout", "compact")
+    except Exception:
+        layout = "compact"
+    business = read("business.md")
+    domain_text = read("domains.md") if layout == "full" else (business or read("domains.md"))
+    activity_text = read("activities.md") if layout == "full" else (business or read("activities.md"))
+    domains_h, domain_rows = table_with(domain_text, "业务域")
     domain_names = {r[1] for r in domain_rows if len(r) > 1 and r[1]} if domains_h else set()
     domain_codes = {r[0] for r in domain_rows if r and r[0] and r[0] != "#"} if domains_h else set()
-    activities_h, activity_rows = table_with(read("activities.md"), "业务域", "环节")
+    activities_h, activity_rows = table_with(activity_text, "业务域", "环节")
     if activity_rows and (domain_names or domain_codes):
         allowed = domain_names | domain_codes
         for row in activity_rows:
@@ -89,7 +96,7 @@ def main() -> int:
         for d in dups:
             issues.append(f"duplicate {label}: {d!r}")
 
-    print(f"players: {plays}  relations: {rels}  domains: {len(domain_names)}  activities: {activities_count(read('activities.md'))}")
+    print(f"players: {plays}  relations: {rels}  domains: {len(domain_names)}  activities: {activities_count(activity_text)}")
     print(f"issues: {len(issues)}")
     for issue in sorted(set(issues)):
         print("WARN:", issue)

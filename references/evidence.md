@@ -79,10 +79,10 @@
 
 `scripts/validate_artifacts.py` 目前会检查：
 
-- 必需产物是否存在（含 `.mmd` / `calibration-log.md` / `drill-scorecard.md`）；
+- 必需产物是否存在（compact：8 个；full 旧布局另算）；
 - `sources.jsonl` 每行可解析、`id/title/url/published/accessed/tier` 齐全、tier 合法、`accessed` 为 `YYYY-MM-DD`、`usedFor` 为字符串或数组；
 - 正文中的 `[S#]` 都能在 sources 中找到（跳过代码块与行内代码）；模板占位符 `{{` 是否残留；
-- `glossary.md` 的术语行与状态统计（跳过汇总表）、`verification-list.md` 的已填条目数、`flow.md` 的 ❓ 节点数、`corrections.md` 的已填修正数（这些是 WARN，`--strict` 下变 ERROR）；
+- `glossary.md` 的术语行与状态统计、`verification-list.md` 的已填条目/修正数、`business.md` 的域与活动行（这些是 WARN，`--strict` 下变 ERROR）；
 - `state.json` 的计数与文件实际是否一致。
 
 `readiness.py` 另外会做**证据闸门**：没有 ≥5 处修正、≥8 条来源、≥20 个术语、≥5 条待验证、≥10 个链路玩家、≥5 条关系、≥3 个业务域、≥10 行活动（目标 15），即使五维自报满分也不会 PASS。

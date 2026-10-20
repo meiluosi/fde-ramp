@@ -6,7 +6,7 @@
 
 ```bash
 RAMP=~/.dsh/skills/fde-ramp
-# 默认 minimal 13 文件；要完整旧布局加 --full
+# 默认 compact 8 文件；方案模式加 --analysis；历史旧布局才加 --full
 python3 "$RAMP/scripts/init_ramp.py" --industry "煤层气" --customer "某公司" --persona "技术负责人" --deadline 2026-10-25
 python3 "$RAMP/scripts/next_steps.py" --root ramp        # 下一步最该做的 3 件事
 python3 "$RAMP/scripts/render_sources.py" --root ramp    # 生成人看的来源清单 sources.md
@@ -61,7 +61,7 @@ python3 "$RAMP/scripts/validate_artifacts.py" --root ramp
 - 不辩解；
 - 每改一处问「为什么」；
 - 记改前/改后；
-- 回来改 `chain.md` / `domains.md` / `flow.md` / `activities.md`，没解决的进待验证清单。
+- 回来改 `chain.md` / `business.md`；修正记录和待验证写进 `verification-list.md`。
 
 ## 5.5 可选：算账 + 找 AI 机会（方案模式）
 

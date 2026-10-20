@@ -10,11 +10,11 @@
 
 | 依赖 | 怎么判断有没有 | 没有时 |
 |---|---|---|
-| `dsh-industry-research` | 工具里有 `industry_map` / `industry_track` / `company_scan` | 用本 skill 的 `value-chain.md` + `web_search`/`web_fetch` |
+| `dsh-industry-research` | 工具里有 `industry_map` / `industry_track` / `company_scan` | 用本 skill 的 `chain.md` + `web_search`/`web_fetch` |
 | `dsh-scout` | 工具里有 `scout_start` / `scout_add_claim` / `scout_report` | 用 `sources.jsonl` 的 tier 手工做证据分级 |
 | `dsh-kb` | 设置里/侧栏有知识库入口，或工具里有 `kb_*` | 客户文件路径写进 `sources.jsonl`，按需 `read` |
-| `material-audit` skill | 技能列表里有 | 用 `templates/flow.md` 手工抽 |
-| `gap-rehearsal` skill | 技能列表里有 | 用 `open-questions.md` 自问自答 |
+| `material-audit` skill | 技能列表里有 | 用 `templates/business.md` 手工抽 |
+| `gap-rehearsal` skill | 技能列表里有 | 用 `verification-list.md` 自问自答 |
 | `chain-authoring` skill | 技能列表里有 | 只交 mermaid + markdown |
 | `web_search` / `web_fetch` | 工具列表里有 | 只能靠客户给的材料；明确告知用户「公开源覆盖不足」 |
 
@@ -26,7 +26,7 @@
 
 **怎么用**：
 
-- 第 1 步：先调 `industry_map` 建行业链，再把 `chain.json` 里的节点/指标抄进 `value-chain.md`，保留 `sourceRef`；
+- 第 1 步：先调 `industry_map` 建行业链，再把 `chain.json` 里的节点/指标抄进 `chain.md`，保留 `sourceRef`；
 - 第 1 步：用 `industry_track` 抓近 12 个月政策/新闻，产出 `sources.jsonl` 的一部分；
 - 第 3 步：用 `company_scan` 生成客户公司卡，作为业务流程与活动表的上游输入；
 - **不要**把 `industry_report` 直接当交付物——它是报告，不是对话就绪度；可以把它当 第 1 步 的加速器。
@@ -39,8 +39,8 @@
 
 **怎么用**：
 
-- 客户是陌生理公司：先跑 `scout_start` → `scout_search` → `scout_add_source` → `scout_verify_identity`，把结论并入 `value-chain.md` 的「客户」节；
-- 把它的 `scout_questions` 作为 `open-questions.md` 的输入；
+- 客户是陌生理公司：先跑 `scout_start` → `scout_search` → `scout_add_source` → `scout_verify_identity`，把结论并入 `chain.md` 的「客户」节；
+- 把它的 `scout_questions` 作为 `verification-list.md` 的输入；
 - 它证据等级比本 skill 更细，冲突时以它的 E3 官方核验为准。
 
 **注意**：它评的是「公司/岗位值不值得推进」，不是「行业能不能对话」；不要拿它的报告替代 第 2 步/3/4。
@@ -92,12 +92,12 @@ fde-ramp（本 skill）    → 四步编排 + 术语校准 + 流程图 + 被否�
 | 工具 | 对应 | 输入 | 输出 |
 |---|---|---|---|
 | `ramp_init` | 开工 | industry/customer/persona/deadline | `ramp/` 骨架 + `state.json` |
-| `ramp_map` | 第 1 步 | 研报/年报/监管目录 | `value-chain.md` + `sources.jsonl` |
+| `ramp_map` | 第 1 步 | 研报/年报/监管目录 | `chain.md` + `sources.jsonl` |
 | `ramp_chain` | 第 1 步 | 分段/玩家/关系 | `chain.md` + `chain.mmd` |
-| `ramp_domains` | 第 3 步 | 业务域划分 | `domains.md` |
-| `ramp_activities` | 第 3 步 | 流程拆活动 | `activities.md` |
+| `ramp_domains` | 第 3 步 | 业务域划分 | `business.md` |
+| `ramp_activities` | 第 3 步 | 流程拆活动 | `business.md` |
 | `ramp_glossary` | 第 2 步 | 候选词 + 客户文档 | `glossary.md`（带状态） |
-| `ramp_flow` | 第 3 步 | 地图 + 访谈 | `flow.md` + `verification-list.md` |
+| `ramp_flow` | 第 3 步 | 地图 + 访谈 | `business.md` + `verification-list.md` |
 | `ramp_verify` | 第 3/4 步 | 待验证项 | 更新清单与状态 |
 | `ramp_brief` | 收尾 | 对象/目标 | `brief.md` |
 | `ramp_score` | 收尾 | 产物 | `readiness.md` |

@@ -121,7 +121,7 @@
 - reader B：读客户年报/官网，输出「客户自述业务 / 收入构成 / 战略措辞 / 与行业的差异」；
 - reader C：读监管目录，输出「文件清单 / 管什么 / 硬门槛」；
 - chain builder：按分段逐个列玩家，补现状/近一年动作/规划（标自述/转述/推断）与关系（标证据与信心）；
-- synthesizer：合并成 `value-chain.md` + `chain.md` + `sources.jsonl`，标出冲突与缺口。
+- synthesizer：合并成 `chain.md` + `sources.jsonl`，标出冲突与缺口。
 
 三个 reader 的 prompt 必须一致（除材料不同），避免把「材料差异」误判成「行业差异」。
 

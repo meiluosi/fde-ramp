@@ -23,10 +23,10 @@
 | 步骤 | 做什么 | 产出 |
 |---|---|---|
 | 第 0 步 · 决策简报 | 先写清要做什么决策、谁拍板、成功标准、错误代价、什么证据会推翻判断 | `decision-brief.md` |
-| 第 1 步 · 画地图 | 读 3 份行业报告 + 客户年报/官网 + 监管目录；画钱怎么流；再画全链路关系：每段有谁、什么关系、下一步想干什么 | `value-chain.md`、`chain.md`、`sources.jsonl` |
-| 第 2 步 · 行话小抄 | AI 先列 60–80 个候选（研报 + 公众号/知乎/B站/播客的从业者科普）→ 用客户文档校准 → 收敛到约 50 词 | `glossary.md`、`calibration-log.md` |
-| 第 3 步 · 拆业务 | 先分业务域 → 再画流程 → 再拆活动表（做什么/谁做/影响谁/工具/为什么/多久一次/常见异常/上下游交接/谁验收/是否外包） | `domains.md`、`flow.md`、`activities.md`、`verification-list.md` |
-| 第 4 步 · 去被改 | 带链路图、域图、活动表去找一线员工：「我画了张图，肯定有不对的地方，您帮我改改」 | `corrections.md` + 改过的图/表 |
+| 第 1 步 · 画地图 | 读 3 份行业报告 + 客户年报/官网 + 监管目录；画钱怎么流；再画全链路关系：每段有谁、什么关系、下一步想干什么 | `chain.md`、`sources.jsonl` |
+| 第 2 步 · 行话小抄 | AI 先列 60–80 个候选（研报 + 公众号/知乎/B站/播客的从业者科普）→ 用客户文档校准 → 收敛到约 50 词 | `glossary.md` |
+| 第 3 步 · 拆业务 | 先分业务域 → 再画流程 → 再拆活动表（做什么/谁做/影响谁/工具/为什么/多久一次/常见异常/上下游交接/谁验收/是否外包） | `business.md`（域+流程+活动）、`verification-list.md` |
+| 第 4 步 · 去被改 | 带链路图、域图、活动表去找一线员工：「我画了张图，肯定有不对的地方，您帮我改改」 | `verification-list.md` 里的修正记录 + 改过的图/表 |
 
 **不设固定时长。** 资料少就快，约不到人就慢；但第 4 步不能省——没有它，前面三步只是练习。
 
@@ -34,7 +34,7 @@
 
 - **explore（默认）**：先跑通、先找缺口；允许公开源 + 模拟访谈，用于内部分析。
 - **client-ready（对外）**：必须真实访谈、≥3 个 `verified` 术语、provenance 标 `customer`；`readiness --client --check` 会拦住模拟内容。
-- **minimal（默认）**：13 个文件，先跑完第 0–4 步；**full**：`init_ramp.py --full` 才生成旧版 24 个文件。
+- **compact（默认）**：8 个文件，先跑完第 0–4 步；**full**：`init_ramp.py --full` 仅用于历史示例/兼容旧布局。
 - 对外前把 `state.json` 的 `mode` 改成 `client-ready`，并填好 `provenance`。
 
 ### 可选第 5 步：方案模式（算账 + 找机会）
@@ -77,7 +77,7 @@ ln -s ~/Documents/GitHub/fde-ramp ~/.dsh/skills/fde-ramp
 cd ~/Documents/GitHub/fde-ramp
 python3 scripts/init_ramp.py --industry "煤层气" --customer "某公司" \
     --persona "技术负责人" --deadline 2026-10-25
-# 默认 minimal 13 文件；要旧版完整布局加 --full
+# 默认 compact 8 文件；方案模式加 --analysis；历史旧布局才加 --full
 python3 scripts/render_sources.py --root ramp   # 生成 sources.md（人看的来源清单）
 python3 scripts/next_steps.py --root ramp      # 下一步最该做的 3 件事
 python3 scripts/validate_artifacts.py --root ramp
@@ -114,7 +114,7 @@ fde-ramp/
   templates/                   # 空模板（AI 填）
     decision-brief.md          # 第 0 步：决策、拍板人、成功标准、干系人
   scripts/
-    init_ramp.py               # 生成 ramp/ 工作区（默认 minimal；--full 完整）
+    init_ramp.py               # 生成 ramp/ 工作区（默认 compact 8 文件；--analysis/--full 可选）
     render_sources.py          # 从 sources.jsonl 生成人看的 sources.md
     import_industry_map.py     # 把 dsh-industry-research 的 chain.json 转成 ramp 种子
     import_industry_track.py   # 把 timeline.jsonl 转成政策/动态草稿
@@ -195,8 +195,8 @@ fde-ramp/
 
 ## 最小布局 vs 完整布局
 
-- **minimal（默认）**：13 个文件，覆盖第 0–4 步 + 待验证 + brief；适合第一次跑通；
-- **full（`--full`）**：24 个文件，含 `flow.md`、`value-chain.md`、`readiness.md`、drill/calibration、方案模式三件套；
+- **compact（默认）**：8 个文件——decision-brief、chain、glossary、business、verification-list、brief、sources.jsonl、state.json；
+- **full（`--full`）**：24 个文件，仅用于历史示例/兼容；
 - 两个布局都通过 `validate_artifacts.py`（state.layout 自动识别）；
 - 对外前先 `next_steps.py` 看缺口，再 `readiness --client --check`。
 
@@ -229,7 +229,7 @@ fde-ramp/
 
 ## 当前状态
 
-- ✅ **v1.0.0（当前）**：收敛完成——explore/client-ready 分层、第 0 步决策简报、默认 minimal 13 文件、净 ROI/试点/干系人/访谈包、来源检查/一致性/next_steps；插件读写工具与侧栏面板仍保留。
+- ✅ **v1.1.0（当前）**：进一步收敛——默认 compact 8 文件（合域/流程/活动、合待验证/修正/开放问题、去掉 plan/独立 mmd）；旧版 full 仅兼容。
 - ⏭ **下一步**：用真实客户跑一次 explore → 访谈 → client-ready；收集哪些字段真正被用、哪些可以再删。
 
 ## 已知限制

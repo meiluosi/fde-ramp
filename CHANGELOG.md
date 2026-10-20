@@ -4,6 +4,18 @@
 
 - 文档：README 增加 FDE Skill 系列导航与跨 Skill 编号约定；无代码改动。
 
+## v1.1.0 · 2026-10-20
+
+- 进一步收敛：默认生成从 13 文件降到 **compact 8 文件**。
+  - `plan.md` 移除：执行顺序交给 `next_steps.py`，决策写 `decision-brief.md`；
+  - `domains.md` + `flow.md` + `activities.md` → `business.md`；
+  - `corrections.md` + `open-questions.md` + `verification-list.md` → `verification-list.md`；
+  - `chain.mmd` 移除：mermaid 直接内嵌在 `chain.md`；
+  - `sources.md` 改为按需生成，不再必填。
+- 方案模式用 `--analysis` 额外生成 `process-metrics.md` / `opportunities.md`；旧 24 文件布局仅保留给历史示例/兼容（`--full`，不再推荐）。
+- 脚本同步：validator/readiness/next_steps/consistency 按 `state.layout` 读取 compact 或 full；compact 的修正记录从 `verification-list.md` 读取。
+- selftest 仍 30 项通过；examples 的 full 历史示例仍通过 strict/readiness。
+
 ## v1.0.0 · 2026-10-20
 
 收敛版本：不追求更多文档，先把可信、收敛、交付做扎实。
